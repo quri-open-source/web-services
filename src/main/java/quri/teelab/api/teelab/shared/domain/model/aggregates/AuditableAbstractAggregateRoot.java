@@ -14,12 +14,15 @@ import java.util.UUID;
  * Abstract class for aggregate roots that need auditing capabilities.
  * It extends AbstractAggregateRoot to support domain events.
  *
- * @param <T> the type of the aggregate root
+ * @param <T> el tipo concreto del agregado
  */
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-public class AuditableAbstractAggregateRoot<T extends AbstractAggregateRoot<T>> extends AbstractAggregateRoot<T> {
+@SuppressWarnings("unchecked")
+public abstract class AuditableAbstractAggregateRoot<T extends AbstractAggregateRoot<T>>
+        extends AbstractAggregateRoot<T> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "UUID")
@@ -36,11 +39,17 @@ public class AuditableAbstractAggregateRoot<T extends AbstractAggregateRoot<T>> 
     private Date updatedAt;
 
     /**
-     * Registers a domain event to be published.
-     *
-     * @param event the domain event to register
+     * Registra un evento de dominio.
      */
     public void addDomainEvent(Object event) {
         registerEvent(event);
+    }
+
+    /**
+     * Devuelve la instancia concreta del agregado.
+     * El cast es seguro porque T es el tipo de la subclase.
+     */
+    protected T self() {
+        return (T) this;
     }
 }
