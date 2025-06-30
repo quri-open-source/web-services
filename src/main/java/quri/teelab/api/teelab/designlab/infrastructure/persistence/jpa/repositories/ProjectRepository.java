@@ -13,4 +13,5 @@ import java.util.UUID;
 public interface ProjectRepository extends JpaRepository<Project, ProjectId> {
     boolean existsByUserId(UserId userId);
     List<Project> findAllByUserId(UserId userId);
+    long countByUserId(UserId userId);
 }
