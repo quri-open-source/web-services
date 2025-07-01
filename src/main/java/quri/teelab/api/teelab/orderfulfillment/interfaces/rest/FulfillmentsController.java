@@ -17,6 +17,7 @@ import quri.teelab.api.teelab.orderfulfillment.interfaces.rest.transform.CreateF
 import quri.teelab.api.teelab.orderfulfillment.interfaces.rest.transform.FulfillmentResourceFromEntityAssembler;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -33,17 +34,43 @@ public class FulfillmentsController {
         this.fulfillmentQueryService = fulfillmentQueryService;
     }
 
-    @GetMapping(value = "/{manufacturerId}")
-    @Operation(summary = "Get all fulfillments", description = "Get all fulfillments")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Fulfillments found"), @ApiResponse(responseCode = "404", description = "Fulfillments not found")})
-    public ResponseEntity<List<FulfillmentResource>> getAllFulfillmentsByManufacturerId(@PathVariable String manufacturerId) {
+    @GetMapping
+    @Operation(summary = "Get all fulfillments", description = "Get all fulfillments, optionally filtered by manufacturer")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Fulfillments found"), 
+        @ApiResponse(responseCode = "404", description = "No fulfillments found")
+    })
+    public ResponseEntity<List<FulfillmentResource>> getAllFulfillments(
+            @RequestParam(value = "manufacturerId", required = false) String manufacturerId) {
+        
+        if (manufacturerId != null) {
+            var getAllFulfillmentsByManufacturerIdQuery = new GetAllFulfillmentsByManufacturerIdQuery(manufacturerId);
+            var fulfillments = fulfillmentQueryService.handle(getAllFulfillmentsByManufacturerIdQuery);
+            if (fulfillments.isEmpty()) return ResponseEntity.notFound().build();
+            var fulfillmentResources = fulfillments.stream()
+                .map(FulfillmentResourceFromEntityAssembler::toResourceFromEntity)
+                .toList();
+            return ResponseEntity.ok(fulfillmentResources);
+        }
+        
+        // TODO: Implement GetAllFulfillmentsQuery for when no manufacturerId is provided
+        return ResponseEntity.notFound().build();
+    }
 
-        var getAllFulfillmentsByManufacturerIdQuery = new GetAllFulfillmentsByManufacturerIdQuery(manufacturerId);
-        // TODO: Create a transform resource to get manufacturerId from request parameters
-        var fulfillments = fulfillmentQueryService.handle(getAllFulfillmentsByManufacturerIdQuery);
-        if (fulfillments.isEmpty()) return ResponseEntity.notFound().build();
-        var fulfillmentResources = fulfillments.stream().map(FulfillmentResourceFromEntityAssembler::toResourceFromEntity).toList();
-        return ResponseEntity.ok(fulfillmentResources);
+    @GetMapping("/{fulfillmentId}")
+    @Operation(summary = "Get fulfillment by ID", description = "Get a specific fulfillment by its ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Fulfillment found"), 
+        @ApiResponse(responseCode = "404", description = "Fulfillment not found")
+    })
+    public ResponseEntity<FulfillmentResource> getFulfillmentById(@PathVariable UUID fulfillmentId) {
+        var getFulfillmentByIdQuery = new GetFulfillmentByIdQuery(fulfillmentId);
+        var fulfillment = fulfillmentQueryService.handle(getFulfillmentByIdQuery);
+        
+        if (fulfillment.isEmpty()) return ResponseEntity.notFound().build();
+        
+        var fulfillmentResource = FulfillmentResourceFromEntityAssembler.toResourceFromEntity(fulfillment.get());
+        return ResponseEntity.ok(fulfillmentResource);
     }
 
     @PostMapping

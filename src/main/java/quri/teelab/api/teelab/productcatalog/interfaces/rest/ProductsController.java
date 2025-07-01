@@ -38,18 +38,36 @@ public class ProductsController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all products", description = "Get all products from the catalog")
+    @Operation(summary = "Get all products", description = "Get all products from the catalog, optionally filtered by project or tags")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Products found"),
             @ApiResponse(responseCode = "404", description = "Products not found")
     })
-    public ResponseEntity<List<ProductResource>> getAllProducts() {
-        var products = productQueryService.handle(new GetAllProductsQuery());
-        if (products.isEmpty()) return ResponseEntity.notFound().build();
-
-        var productResources = products.stream()
-                .map(ProductResourceFromEntityAssembler::toResourceFromEntity)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<ProductResource>> getAllProducts(
+            @RequestParam(value = "projectId", required = false) String projectId,
+            @RequestParam(value = "tags", required = false) List<String> tags) {
+        
+        List<ProductResource> productResources;
+        
+        if (projectId != null) {
+            var products = productQueryService.handle(new GetProductsByProjectIdQuery(projectId));
+            if (products.isEmpty()) return ResponseEntity.notFound().build();
+            productResources = products.stream()
+                    .map(ProductResourceFromEntityAssembler::toResourceFromEntity)
+                    .collect(Collectors.toList());
+        } else if (tags != null && !tags.isEmpty()) {
+            var products = productQueryService.handle(new SearchProductsByTagsQuery(tags));
+            if (products.isEmpty()) return ResponseEntity.notFound().build();
+            productResources = products.stream()
+                    .map(ProductResourceFromEntityAssembler::toResourceFromEntity)
+                    .collect(Collectors.toList());
+        } else {
+            var products = productQueryService.handle(new GetAllProductsQuery());
+            if (products.isEmpty()) return ResponseEntity.notFound().build();
+            productResources = products.stream()
+                    .map(ProductResourceFromEntityAssembler::toResourceFromEntity)
+                    .collect(Collectors.toList());
+        }
 
         return ResponseEntity.ok(productResources);
     }
@@ -66,40 +84,6 @@ public class ProductsController {
 
         var productResource = ProductResourceFromEntityAssembler.toResourceFromEntity(product.get());
         return ResponseEntity.ok(productResource);
-    }
-
-    @GetMapping("/by-project/{projectId}")
-    @Operation(summary = "Get products by project ID", description = "Get all products associated with a specific project")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Products found"),
-            @ApiResponse(responseCode = "404", description = "Products not found")
-    })
-    public ResponseEntity<List<ProductResource>> getProductsByProjectId(@PathVariable String projectId) {
-        var products = productQueryService.handle(new GetProductsByProjectIdQuery(projectId));
-        if (products.isEmpty()) return ResponseEntity.notFound().build();
-
-        var productResources = products.stream()
-                .map(ProductResourceFromEntityAssembler::toResourceFromEntity)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(productResources);
-    }
-
-    @GetMapping("/search")
-    @Operation(summary = "Search products by tags", description = "Search products that match any of the provided tags")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Products found"),
-            @ApiResponse(responseCode = "404", description = "Products not found")
-    })
-    public ResponseEntity<List<ProductResource>> searchProductsByTags(@RequestParam List<String> tags) {
-        var products = productQueryService.handle(new SearchProductsByTagsQuery(tags));
-        if (products.isEmpty()) return ResponseEntity.notFound().build();
-
-        var productResources = products.stream()
-                .map(ProductResourceFromEntityAssembler::toResourceFromEntity)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(productResources);
     }
 
     @PostMapping

@@ -3,6 +3,7 @@ package quri.teelab.api.teelab.analytics.interfaces.rest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +16,11 @@ import quri.teelab.api.teelab.analytics.interfaces.rest.transform.CustomerAnalyt
 
 import java.util.UUID;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
-@RequestMapping("/api/analytics/customer")
+@RequestMapping(value = "/api/v1/analytics", produces = APPLICATION_JSON_VALUE)
+@Tag(name = "Analytics", description = "Analytics endpoints for customers and manufacturers")
 public class CustomerAnalyticsController {
     private final CustomerAnalyticsQueryServiceImpl customerAnalyticsQueryService;
 
@@ -30,7 +34,7 @@ public class CustomerAnalyticsController {
      * @param userId the customer user identifier
      * @return Customer analytics metrics
      */
-    @GetMapping("/{userId}")
+    @GetMapping("/customer/{userId}")
     @Operation(
             summary = "Get customer analytics",
             description = "Returns analytics metrics related to design activities for a customer, such as total projects, blueprints, designed garments, and completed projects."
