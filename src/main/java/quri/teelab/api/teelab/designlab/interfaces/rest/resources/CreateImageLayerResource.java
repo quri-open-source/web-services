@@ -1,20 +1,24 @@
 package quri.teelab.api.teelab.designlab.interfaces.rest.resources;
 
-import quri.teelab.api.teelab.designlab.domain.model.valueobjects.ProjectId;
+import org.springframework.web.multipart.MultipartFile;
 
-public record CreateImageLayerResource
-        (ProjectId projectId, String imageUrl, Float width, Float height)
-{
-
+public record CreateImageLayerResource(
+        MultipartFile imageFile
+) {
     public CreateImageLayerResource {
-        if (imageUrl == null || imageUrl.isBlank()) {
-            throw new IllegalArgumentException("Image URL cannot be null or blank");
+        if (imageFile == null || imageFile.isEmpty()) {
+            throw new IllegalArgumentException("Image file cannot be null or empty");
         }
-        if (width == null || width <= 0) {
-            throw new IllegalArgumentException("Width must be a positive number");
+        
+        // Validate file type
+        String contentType = imageFile.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("File must be an image");
         }
-        if (height == null || height <= 0) {
-            throw new IllegalArgumentException("Height must be a positive number");
+        
+        // Validate file size (e.g., max 10MB)
+        if (imageFile.getSize() > 10 * 1024 * 1024) {
+            throw new IllegalArgumentException("Image file size cannot exceed 10MB");
         }
     }
 }
