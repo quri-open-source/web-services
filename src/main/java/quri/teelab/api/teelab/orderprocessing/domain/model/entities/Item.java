@@ -1,13 +1,18 @@
 package quri.teelab.api.teelab.orderprocessing.domain.model.entities;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-@Embeddable
+@Entity
 public class Item {
+    @Id
     private UUID id;
+
     private UUID projectId;
     private int quantity;
     private BigDecimal unitPrice;
