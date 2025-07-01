@@ -40,10 +40,14 @@ public class LayerCommandServiceImpl implements LayerCommandService {
                 .orElseThrow(() -> new IllegalArgumentException("Project with ID " + command.projectId() + " does not exist."));
 
         String imageUrl = command.imageUrl().getAbsolutePath();
-        cloudinaryService.uploadImage(imageUrl);
+        var image = cloudinaryService.uploadImage(imageUrl);
 
+        if (image.isEmpty()) {
+            throw new IllegalArgumentException("Failed to upload image to Cloudinary.");
+        }
 
-        var layer = new ImageLayer(command);
+        var layer = new ImageLayer(command, image.get());
+
         project.addLayer(layer);
         projectRepository.save(project);
         return layer.getId();
