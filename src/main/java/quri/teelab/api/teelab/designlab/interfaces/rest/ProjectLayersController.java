@@ -71,7 +71,7 @@ public class ProjectLayersController {
     }
 
     @PostMapping(value = "/images")
-    public ResponseEntity<?> CreateProjectLayerText(@RequestBody CreateImageLayerResource resource) {
+    public ResponseEntity<?> CreateProjectLayerImage(@RequestBody CreateImageLayerResource resource) {
         var createImageLayerCommand = CreateImageLayerCommandFromResourceAssembler.ToCommandFromResource(resource);
 
         var createdLayerId = layerCommandService.handle(createImageLayerCommand);
