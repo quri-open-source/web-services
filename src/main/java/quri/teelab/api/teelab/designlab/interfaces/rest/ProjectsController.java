@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import quri.teelab.api.teelab.designlab.domain.model.queries.GetAllProjectsByUserIdQuery;
@@ -73,13 +74,14 @@ public class ProjectsController {
         return ResponseEntity.ok(projectResource);
     }
 
-    @PostMapping
+    @PostMapping()
     @Operation(summary = "Create project", description = "Create a new project")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Project created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
     public ResponseEntity<ProjectResource> createProject(@RequestBody CreateProjectResource resource) {
+        System.out.println("Received CreateProjectResource: ");
         var createProjectCommand = CreateProjectCommandFromResourceAssembler.CreateProjectCommandFromResourceAssembler(resource);
         var projectId = projectCommandService.handle(createProjectCommand);
 
