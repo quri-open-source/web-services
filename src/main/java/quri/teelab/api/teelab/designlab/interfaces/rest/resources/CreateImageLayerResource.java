@@ -1,15 +1,13 @@
 package quri.teelab.api.teelab.designlab.interfaces.rest.resources;
 
+import org.springframework.web.multipart.MultipartFile;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.ProjectId;
 
 public record CreateImageLayerResource
-        (ProjectId projectId, String imageUrl, Float width, Float height)
+        (ProjectId projectId, MultipartFile imageUrl, Float width, Float height)
 {
 
     public CreateImageLayerResource {
-        if (imageUrl == null || imageUrl.isBlank()) {
-            throw new IllegalArgumentException("Image URL cannot be null or blank");
-        }
         if (width == null || width <= 0) {
             throw new IllegalArgumentException("Width must be a positive number");
         }

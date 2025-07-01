@@ -36,7 +36,7 @@ public class ImageLayer extends Layer {
 
     public ImageLayer(CreateImageLayerCommand command) {
         super(new LayerId(UUID.randomUUID()), LayerType.IMAGE);
-        this.imageUrl = command.imageUrl();
+        this.imageUrl = command.imageUrl().getAbsolutePath();
         this.width = command.width();
         this.height = command.height();
     }
