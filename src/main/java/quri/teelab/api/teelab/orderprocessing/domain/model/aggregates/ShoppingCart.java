@@ -11,7 +11,7 @@ import java.util.*;
  * Contiene la lista de ítems, el usuario asociado y el proyecto, así como métodos para manipular el carrito.
  */
 @Entity
-@Table(name = "shopping_cart", uniqueConstraints = @UniqueConstraint(columnNames = "userId"))
+@Table(name = "shopping_carts", uniqueConstraints = @UniqueConstraint(columnNames = "userId"))
 public class ShoppingCart extends AuditableAbstractAggregateRoot<ShoppingCart> {
 
     @Id

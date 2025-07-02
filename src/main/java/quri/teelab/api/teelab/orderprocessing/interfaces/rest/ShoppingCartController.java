@@ -1,13 +1,13 @@
 package quri.teelab.api.teelab.orderprocessing.interfaces.rest;
 
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import quri.teelab.api.teelab.orderprocessing.application.internal.commandservices.ShoppingCartCommandServiceImpl;
 import quri.teelab.api.teelab.orderprocessing.application.internal.queryservices.ShoppingCartQueryServiceImpl;
-import quri.teelab.api.teelab.orderprocessing.domain.model.commands.*;
-import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetAllItemsInShoppingCartQuery;
+import quri.teelab.api.teelab.orderprocessing.domain.model.commands.ClearShoppingCartCommand;
+import quri.teelab.api.teelab.orderprocessing.domain.model.commands.CreateShoppingCartCommand;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources.ShoppingCartResource;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform.ShoppingCartAssembler;
 
@@ -16,7 +16,8 @@ import java.util.UUID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "/api/v1/shopping-cart", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/shopping-carts", produces = APPLICATION_JSON_VALUE)
+@Tag(name = "Shopping Carts")
 public class ShoppingCartController {
 
     private final ShoppingCartCommandServiceImpl commandService;
@@ -48,44 +49,8 @@ public class ShoppingCartController {
         }
     }
 
-    @PostMapping("/items")
-    public ResponseEntity<Void> addItem(@RequestParam("shoppingCartId") UUID cartId,
-                                        @RequestBody @Valid ShoppingCartResource.ItemResource item) {
-        try {
-            commandService.handle(new AddItemToShoppingCartCommand(
-                    cartId, item.itemId(), item.projectId(), item.quantity(), item.unitPrice()
-            ));
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @PutMapping("/items/{itemId}")
-    public ResponseEntity<Void> updateItemQuantity(@RequestParam("shoppingCartId") UUID cartId,
-                                                   @PathVariable UUID itemId,
-                                                   @RequestParam("quantity") int quantity) {
-        try {
-            commandService.handle(new UpdateItemQuantityCommand(cartId, itemId, quantity));
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @DeleteMapping("/items/{itemId}")
-    public ResponseEntity<Void> removeItem(@RequestParam("shoppingCartId") UUID cartId,
-                                           @PathVariable UUID itemId) {
-        try {
-            commandService.handle(new RemoveItemFromShoppingCartCommand(cartId, itemId));
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @DeleteMapping("/clear")
-    public ResponseEntity<Void> clearCart(@RequestParam("shoppingCartId") UUID cartId) {
+    @DeleteMapping("/{cartId}/clear")
+    public ResponseEntity<Void> clearCart(@PathVariable UUID cartId) {
         try {
             commandService.handle(new ClearShoppingCartCommand(cartId));
             return ResponseEntity.noContent().build();
