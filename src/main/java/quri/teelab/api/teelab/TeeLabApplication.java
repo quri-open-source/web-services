@@ -3,10 +3,8 @@ package quri.teelab.api.teelab;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication(scanBasePackages = "quri.teelab.api")
-@EnableJpaAuditing
 public class TeeLabApplication {
 
     public static void main(String[] args) {
