@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfiguration {
 
-    @Value("${spring.application.name")
+    @Value("${spring.application.name}")
     String applicationName;
 
     @Value("${documentation.application.description}")
