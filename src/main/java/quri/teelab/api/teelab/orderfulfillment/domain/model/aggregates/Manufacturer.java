@@ -18,7 +18,7 @@ import java.util.UUID;
 @Table(name = "manufacturers")
 public class Manufacturer extends AuditableAbstractAggregateRoot<Manufacturer> {
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false, columnDefinition = "UUID", unique = true))
+    @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false, unique = true))
     private UserId userId;
 
     @Column(name = "name", nullable = false, length = 100)

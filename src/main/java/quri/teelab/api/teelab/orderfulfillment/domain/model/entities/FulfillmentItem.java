@@ -19,7 +19,7 @@ public class FulfillmentItem {
     private FulfillmentItemId id;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false, columnDefinition = "UUID"))
+    @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))
     private ProductId productId;
 
     @Column(name = "quantity", nullable = false)
@@ -28,7 +28,7 @@ public class FulfillmentItem {
     @Column(name = "status", nullable = false, length = 20)
     private FulfillmentItemStatus status;
 
-    @Column(name = "fulfillment_id", nullable = false, columnDefinition = "UUID", insertable = false, updatable = false)
+    @Column(name = "fulfillment_id", nullable = false, insertable = false, updatable = false)
     private UUID fulfillmentId;
 
     public FulfillmentItem(FulfillmentItemId id, ProductId productId, int quantity, FulfillmentItemStatus status, UUID fulfillmentId) {
