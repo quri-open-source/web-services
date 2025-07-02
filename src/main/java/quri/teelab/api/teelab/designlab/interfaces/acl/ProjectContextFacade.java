@@ -1,9 +1,5 @@
 package quri.teelab.api.teelab.designlab.interfaces.acl;
 
-import quri.teelab.api.teelab.designlab.domain.model.valueobjects.LayerId;
-import quri.teelab.api.teelab.designlab.domain.model.valueobjects.ProjectId;
-import quri.teelab.api.teelab.designlab.domain.model.valueobjects.UserId;
-
 import java.util.List;
 import java.util.UUID;
 

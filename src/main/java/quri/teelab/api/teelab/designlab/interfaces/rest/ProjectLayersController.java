@@ -12,8 +12,6 @@ import quri.teelab.api.teelab.designlab.domain.model.queries.GetLayerByIdQuery;
 import quri.teelab.api.teelab.designlab.domain.services.LayerCommandService;
 import quri.teelab.api.teelab.designlab.domain.services.LayerQueryService;
 import quri.teelab.api.teelab.designlab.domain.services.ProjectCommandService;
-import quri.teelab.api.teelab.designlab.domain.services.ProjectQueryService;
-import quri.teelab.api.teelab.designlab.interfaces.rest.resources.CreateImageLayerResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.CreateTextLayerResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.transform.CreateImageLayerCommandFromResourceAssembler;
 import quri.teelab.api.teelab.designlab.interfaces.rest.transform.CreateTextLayerCommandFromResourceAssembler;

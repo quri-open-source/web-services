@@ -9,7 +9,6 @@ import quri.teelab.api.teelab.designlab.domain.model.commands.CreateImageLayerCo
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.LayerId;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.LayerType;
 
-import java.awt.*;
 import java.util.UUID;
 
 @Entity

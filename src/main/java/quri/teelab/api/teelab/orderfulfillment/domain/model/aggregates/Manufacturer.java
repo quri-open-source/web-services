@@ -3,7 +3,6 @@ package quri.teelab.api.teelab.orderfulfillment.domain.model.aggregates;
 import jakarta.persistence.*;
 import lombok.Getter;
 import quri.teelab.api.teelab.orderfulfillment.domain.model.valueobjects.FulfillmentStatus;
-import quri.teelab.api.teelab.orderfulfillment.domain.model.valueobjects.ManufacturerId;
 import quri.teelab.api.teelab.orderfulfillment.domain.model.valueobjects.OrderId;
 import quri.teelab.api.teelab.orderfulfillment.domain.model.valueobjects.UserId;
 import quri.teelab.api.teelab.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
