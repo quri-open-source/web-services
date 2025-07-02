@@ -1,11 +1,11 @@
-package com.acme.center.platform.iam.interfaces.acl;
+package quri.teelab.api.teelab.iam.interfaces.acl;
 
-import com.acme.center.platform.iam.domain.model.commands.SignUpCommand;
-import com.acme.center.platform.iam.domain.model.entities.Role;
-import com.acme.center.platform.iam.domain.model.queries.GetUserByIdQuery;
-import com.acme.center.platform.iam.domain.model.queries.GetUserByUsernameQuery;
-import com.acme.center.platform.iam.domain.services.UserCommandService;
-import com.acme.center.platform.iam.domain.services.UserQueryService;
+import quri.teelab.api.teelab.iam.domain.model.commands.SignUpCommand;
+import quri.teelab.api.teelab.iam.domain.model.entities.Role;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetUserByIdQuery;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetUserByUsernameQuery;
+import quri.teelab.api.teelab.iam.domain.services.UserCommandService;
+import quri.teelab.api.teelab.iam.domain.services.UserQueryService;
 import org.apache.logging.log4j.util.Strings;
 
 import java.util.ArrayList;

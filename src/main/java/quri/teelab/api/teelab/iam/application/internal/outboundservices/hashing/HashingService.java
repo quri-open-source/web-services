@@ -1,4 +1,4 @@
-package com.acme.center.platform.iam.application.internal.outboundservices.hashing;
+package quri.teelab.api.teelab.iam.application.internal.outboundservices.hashing;
 
 /**
  * HashingService interface

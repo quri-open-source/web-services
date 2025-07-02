@@ -1,6 +1,6 @@
-package com.acme.center.platform.iam.infrastructure.persistence.jpa.repositories;
+package quri.teelab.api.teelab.iam.infrastructure.persistence.jpa.repositories;
 
-import com.acme.center.platform.iam.domain.model.aggregates.User;
+import quri.teelab.api.teelab.iam.domain.model.aggregates.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.acme.center.platform.iam.domain.model.commands;
+package quri.teelab.api.teelab.iam.domain.model.commands;
 
 /**
  * Seed roles command

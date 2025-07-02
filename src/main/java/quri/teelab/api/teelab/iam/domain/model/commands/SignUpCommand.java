@@ -1,6 +1,7 @@
-package com.acme.center.platform.iam.domain.model.commands;
+package quri.teelab.api.teelab.iam.domain.model.commands;
 
-import com.acme.center.platform.iam.domain.model.entities.Role;
+
+import quri.teelab.api.teelab.iam.domain.model.entities.Role;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @param password the password of the user
  * @param roles the roles of the user
  *
- * @see com.acme.center.platform.iam.domain.model.aggregates.User
+ * @see quri.teelab.api.teelab.iam.domain.model.aggregates.User
  */
 public record SignUpCommand(String username, String password, List<Role> roles) {
 }

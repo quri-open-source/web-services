@@ -1,8 +1,8 @@
-package com.acme.center.platform.iam.domain.services;
+package quri.teelab.api.teelab.iam.domain.services;
 
-import com.acme.center.platform.iam.domain.model.aggregates.User;
-import com.acme.center.platform.iam.domain.model.commands.SignInCommand;
-import com.acme.center.platform.iam.domain.model.commands.SignUpCommand;
+import quri.teelab.api.teelab.iam.domain.model.aggregates.User;
+import quri.teelab.api.teelab.iam.domain.model.commands.SignInCommand;
+import quri.teelab.api.teelab.iam.domain.model.commands.SignUpCommand;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Optional;

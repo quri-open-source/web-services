@@ -1,4 +1,4 @@
-package com.acme.center.platform.iam.domain.model.valueobjects;
+package quri.teelab.api.teelab.iam.domain.model.valueobjects;
 
 /**
  * Roles

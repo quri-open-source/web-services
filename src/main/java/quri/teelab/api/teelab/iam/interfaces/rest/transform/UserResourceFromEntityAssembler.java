@@ -1,8 +1,8 @@
-package com.acme.center.platform.iam.interfaces.rest.transform;
+package quri.teelab.api.teelab.iam.interfaces.rest.transform;
 
-import com.acme.center.platform.iam.domain.model.aggregates.User;
-import com.acme.center.platform.iam.domain.model.entities.Role;
-import com.acme.center.platform.iam.interfaces.rest.resources.UserResource;
+import quri.teelab.api.teelab.iam.domain.model.aggregates.User;
+import quri.teelab.api.teelab.iam.domain.model.entities.Role;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.UserResource;
 
 public class UserResourceFromEntityAssembler {
     public static UserResource toResourceFromEntity(User user) {

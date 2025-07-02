@@ -1,11 +1,11 @@
-package com.acme.center.platform.iam.application.internal.queryservices;
+package quri.teelab.api.teelab.iam.application.internal.queryservices;
 
-import com.acme.center.platform.iam.domain.model.aggregates.User;
-import com.acme.center.platform.iam.domain.model.queries.GetAllUsersQuery;
-import com.acme.center.platform.iam.domain.model.queries.GetUserByIdQuery;
-import com.acme.center.platform.iam.domain.model.queries.GetUserByUsernameQuery;
-import com.acme.center.platform.iam.domain.services.UserQueryService;
-import com.acme.center.platform.iam.infrastructure.persistence.jpa.repositories.UserRepository;
+import quri.teelab.api.teelab.iam.domain.model.aggregates.User;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetAllUsersQuery;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetUserByIdQuery;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetUserByUsernameQuery;
+import quri.teelab.api.teelab.iam.domain.services.UserQueryService;
+import quri.teelab.api.teelab.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

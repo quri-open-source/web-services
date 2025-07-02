@@ -1,4 +1,4 @@
-package com.acme.center.platform.iam.infrastructure.authorization.sfs.model;
+package quri.teelab.api.teelab.iam.infrastructure.authorization.sfs.model;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

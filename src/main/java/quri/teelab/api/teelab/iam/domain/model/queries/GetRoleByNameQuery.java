@@ -1,6 +1,6 @@
-package com.acme.center.platform.iam.domain.model.queries;
+package quri.teelab.api.teelab.iam.domain.model.queries;
 
-import com.acme.center.platform.iam.domain.model.valueobjects.Roles;
+import quri.teelab.api.teelab.iam.domain.model.valueobjects.Roles;
 
 /**
  * Get role by name query

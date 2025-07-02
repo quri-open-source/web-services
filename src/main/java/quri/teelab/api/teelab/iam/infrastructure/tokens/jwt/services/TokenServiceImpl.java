@@ -1,6 +1,6 @@
-package com.acme.center.platform.iam.infrastructure.tokens.jwt.services;
+package quri.teelab.api.teelab.iam.infrastructure.tokens.jwt.services;
 
-import com.acme.center.platform.iam.infrastructure.tokens.jwt.BearerTokenService;
+import quri.teelab.api.teelab.iam.infrastructure.tokens.jwt.BearerTokenService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;

@@ -1,14 +1,14 @@
-package com.acme.center.platform.iam.interfaces.rest;
+package quri.teelab.api.teelab.iam.interfaces.rest;
 
-import com.acme.center.platform.iam.domain.services.UserCommandService;
-import com.acme.center.platform.iam.interfaces.rest.resources.AuthenticatedUserResource;
-import com.acme.center.platform.iam.interfaces.rest.resources.SignInResource;
-import com.acme.center.platform.iam.interfaces.rest.resources.SignUpResource;
-import com.acme.center.platform.iam.interfaces.rest.resources.UserResource;
-import com.acme.center.platform.iam.interfaces.rest.transform.AuthenticatedUserResourceFromEntityAssembler;
-import com.acme.center.platform.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
-import com.acme.center.platform.iam.interfaces.rest.transform.SignUpCommandFromResourceAssembler;
-import com.acme.center.platform.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import quri.teelab.api.teelab.iam.domain.services.UserCommandService;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.AuthenticatedUserResource;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.SignInResource;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.SignUpResource;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.UserResource;
+import quri.teelab.api.teelab.iam.interfaces.rest.transform.AuthenticatedUserResourceFromEntityAssembler;
+import quri.teelab.api.teelab.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
+import quri.teelab.api.teelab.iam.interfaces.rest.transform.SignUpCommandFromResourceAssembler;
+import quri.teelab.api.teelab.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

@@ -1,12 +1,12 @@
-package com.acme.center.platform.iam.domain.model.aggregates;
+package quri.teelab.api.teelab.iam.domain.model.aggregates;
 
-import com.acme.center.platform.iam.domain.model.entities.Role;
-import com.acme.center.platform.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import quri.teelab.api.teelab.iam.domain.model.entities.Role;
+import quri.teelab.api.teelab.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
 import java.util.HashSet;
 import java.util.List;

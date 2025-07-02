@@ -1,10 +1,10 @@
-package com.acme.center.platform.iam.interfaces.rest;
+package quri.teelab.api.teelab.iam.interfaces.rest;
 
-import com.acme.center.platform.iam.domain.model.queries.GetAllUsersQuery;
-import com.acme.center.platform.iam.domain.model.queries.GetUserByIdQuery;
-import com.acme.center.platform.iam.domain.services.UserQueryService;
-import com.acme.center.platform.iam.interfaces.rest.resources.UserResource;
-import com.acme.center.platform.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetAllUsersQuery;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetUserByIdQuery;
+import quri.teelab.api.teelab.iam.domain.services.UserQueryService;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.UserResource;
+import quri.teelab.api.teelab.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
