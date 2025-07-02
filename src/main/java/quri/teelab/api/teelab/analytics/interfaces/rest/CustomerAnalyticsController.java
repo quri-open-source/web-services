@@ -34,10 +34,10 @@ public class CustomerAnalyticsController {
      * @param userId the customer user identifier
      * @return Customer analytics metrics
      */
-    @GetMapping("/customer/{userId}")
+    @GetMapping("/customer-kpis/{userId}")
     @Operation(
-            summary = "Get customer analytics",
-            description = "Returns analytics metrics related to design activities for a customer, such as total projects, blueprints, designed garments, and completed projects."
+            summary = "Get customer analytics KPIs",
+            description = "Returns analytics KPIs related to design activities for a customer, such as total projects, blueprints, designed garments, and completed projects."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Customer analytics found and returned successfully"),

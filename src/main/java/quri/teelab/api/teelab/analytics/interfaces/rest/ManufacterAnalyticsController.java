@@ -34,10 +34,10 @@ public class ManufacterAnalyticsController {
      * @param userId the manufacturer user identifier
      * @return Manufacturer analytics metrics
      */
-    @GetMapping("/manufacturer/{userId}")
+    @GetMapping("/manufacturer-kpis/{userId}")
     @Operation(
-            summary = "Get manufacturer analytics",
-            description = "Returns analytics metrics related to production and fulfillment for a manufacturer, such as total orders received, pending fulfillments, produced projects, and average fulfillment time."
+            summary = "Get manufacturer analytics KPIs",
+            description = "Returns analytics KPIs related to production and fulfillment for a manufacturer, such as total orders received, pending fulfillments, produced projects, and average fulfillment time."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Manufacturer analytics found and returned successfully"),
