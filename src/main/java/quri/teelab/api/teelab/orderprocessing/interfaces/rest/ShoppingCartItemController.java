@@ -14,7 +14,7 @@ import java.util.UUID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "/api/v1/shopping-cart/{cartId}/items", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/shopping-carts/{cartId}/items", produces = APPLICATION_JSON_VALUE)
 @Tag(name = "Shopping Cart Items")
 public class ShoppingCartItemController {
 
