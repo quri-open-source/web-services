@@ -1,7 +1,7 @@
 package quri.teelab.api.teelab.usermanagement.infrastructure.persistence.jpa.repositories;
 
-import quri.teelab.api.teelab.usermanagement.domain.Model.aggregates.Profile;
-import quri.teelab.api.teelab.usermanagement.domain.Model.valueobjects.EmailAddress;
+import quri.teelab.api.teelab.usermanagement.domain.model.aggregates.Profile;
+import quri.teelab.api.teelab.usermanagement.domain.model.valueobjects.EmailAddress;
 import quri.teelab.api.teelab.usermanagement.domain.repositories.IProfileRepository;
 
 import org.springframework.data.jpa.repository.Query;

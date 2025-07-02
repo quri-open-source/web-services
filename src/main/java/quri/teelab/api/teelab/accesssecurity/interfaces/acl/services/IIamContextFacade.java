@@ -1,4 +1,4 @@
-package quri.teelab.api.teelab.accesssecurity.interfaces.acl.Services;
+package quri.teelab.api.teelab.accesssecurity.interfaces.acl.services;
 
 import java.util.Optional;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package quri.teelab.api.teelab.usermanagement.domain.Model.valueobjects;
+package quri.teelab.api.teelab.usermanagement.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;

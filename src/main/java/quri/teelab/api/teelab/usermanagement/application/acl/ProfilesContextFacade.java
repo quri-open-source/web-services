@@ -1,8 +1,8 @@
 package quri.teelab.api.teelab.usermanagement.application.acl;
 
-import quri.teelab.api.teelab.usermanagement.domain.Model.commands.CreateProfileCommand;
-import quri.teelab.api.teelab.usermanagement.domain.Model.queries.GetProfileByEmailQuery;
-import quri.teelab.api.teelab.usermanagement.domain.Model.valueobjects.EmailAddress;
+import quri.teelab.api.teelab.usermanagement.domain.model.commands.CreateProfileCommand;
+import quri.teelab.api.teelab.usermanagement.domain.model.queries.GetProfileByEmailQuery;
+import quri.teelab.api.teelab.usermanagement.domain.model.valueobjects.EmailAddress;
 import quri.teelab.api.teelab.usermanagement.domain.services.IProfileCommandService;
 import quri.teelab.api.teelab.usermanagement.domain.services.IProfileQueryService;
 import quri.teelab.api.teelab.usermanagement.interfaces.acl.IProfilesContextFacade;

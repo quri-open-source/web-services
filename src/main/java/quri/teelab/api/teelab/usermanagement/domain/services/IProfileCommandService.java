@@ -1,7 +1,7 @@
 package quri.teelab.api.teelab.usermanagement.domain.services;
 
-import quri.teelab.api.teelab.usermanagement.domain.Model.aggregates.Profile;
-import quri.teelab.api.teelab.usermanagement.domain.Model.commands.CreateProfileCommand;
+import quri.teelab.api.teelab.usermanagement.domain.model.aggregates.Profile;
+import quri.teelab.api.teelab.usermanagement.domain.model.commands.CreateProfileCommand;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * This class configures JPA entity scanning and repository scanning for Profile entities.
  */
 @Configuration("userManagementModelBuilderExtensions")
-@EntityScan(basePackages = "quri.teelab.api.teelab.usermanagement.domain.Model.aggregates")
+@EntityScan(basePackages = "quri.teelab.api.teelab.usermanagement.domain.model.aggregates")
 @EnableJpaRepositories(basePackages = "quri.teelab.api.teelab.usermanagement.infrastructure.persistence.jpa.repositories")
 public class ModelBuilderExtensions {
     

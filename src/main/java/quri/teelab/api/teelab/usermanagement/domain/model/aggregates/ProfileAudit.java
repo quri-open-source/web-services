@@ -1,4 +1,4 @@
-package quri.teelab.api.teelab.usermanagement.domain.Model.aggregates;
+package quri.teelab.api.teelab.usermanagement.domain.model.aggregates;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

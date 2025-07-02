@@ -1,6 +1,6 @@
 package quri.teelab.api.teelab.usermanagement.interfaces.rest.Transform;
 
-import quri.teelab.api.teelab.usermanagement.domain.Model.commands.CreateProfileCommand;
+import quri.teelab.api.teelab.usermanagement.domain.model.commands.CreateProfileCommand;
 import quri.teelab.api.teelab.usermanagement.interfaces.rest.Resources.CreateProfileResource;
 
 /**

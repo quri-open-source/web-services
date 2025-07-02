@@ -8,7 +8,7 @@ import quri.teelab.api.teelab.accesssecurity.domain.model.Queries.GetUserByIdQue
 import quri.teelab.api.teelab.accesssecurity.domain.model.Queries.GetUserByUsernameQuery;
 import quri.teelab.api.teelab.accesssecurity.domain.services.IUserCommandService;
 import quri.teelab.api.teelab.accesssecurity.domain.services.IUserQueryService;
-import quri.teelab.api.teelab.accesssecurity.interfaces.acl.Services.IIamContextFacade;
+import quri.teelab.api.teelab.accesssecurity.interfaces.acl.services.IIamContextFacade;
 
 import java.util.Optional;
 import java.util.UUID;

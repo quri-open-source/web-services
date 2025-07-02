@@ -1,7 +1,7 @@
 package quri.teelab.api.teelab.usermanagement.application.internal.commandservices;
 
-import quri.teelab.api.teelab.usermanagement.domain.Model.aggregates.Profile;
-import quri.teelab.api.teelab.usermanagement.domain.Model.commands.CreateProfileCommand;
+import quri.teelab.api.teelab.usermanagement.domain.model.aggregates.Profile;
+import quri.teelab.api.teelab.usermanagement.domain.model.commands.CreateProfileCommand;
 import quri.teelab.api.teelab.usermanagement.domain.repositories.IProfileRepository;
 import quri.teelab.api.teelab.usermanagement.domain.services.IProfileCommandService;
 import org.springframework.stereotype.Service;

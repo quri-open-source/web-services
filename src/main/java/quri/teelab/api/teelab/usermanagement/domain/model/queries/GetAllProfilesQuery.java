@@ -1,4 +1,4 @@
-package quri.teelab.api.teelab.usermanagement.domain.Model.queries;
+package quri.teelab.api.teelab.usermanagement.domain.model.queries;
 
 /**
  * Query to get all profiles

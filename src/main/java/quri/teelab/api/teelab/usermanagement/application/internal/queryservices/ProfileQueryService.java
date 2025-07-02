@@ -1,9 +1,9 @@
 package quri.teelab.api.teelab.usermanagement.application.internal.queryservices;
 
-import quri.teelab.api.teelab.usermanagement.domain.Model.aggregates.Profile;
-import quri.teelab.api.teelab.usermanagement.domain.Model.queries.GetAllProfilesQuery;
-import quri.teelab.api.teelab.usermanagement.domain.Model.queries.GetProfileByEmailQuery;
-import quri.teelab.api.teelab.usermanagement.domain.Model.queries.GetProfileByIdQuery;
+import quri.teelab.api.teelab.usermanagement.domain.model.aggregates.Profile;
+import quri.teelab.api.teelab.usermanagement.domain.model.queries.GetAllProfilesQuery;
+import quri.teelab.api.teelab.usermanagement.domain.model.queries.GetProfileByEmailQuery;
+import quri.teelab.api.teelab.usermanagement.domain.model.queries.GetProfileByIdQuery;
 import quri.teelab.api.teelab.usermanagement.domain.repositories.IProfileRepository;
 import quri.teelab.api.teelab.usermanagement.domain.services.IProfileQueryService;
 import org.springframework.stereotype.Service;

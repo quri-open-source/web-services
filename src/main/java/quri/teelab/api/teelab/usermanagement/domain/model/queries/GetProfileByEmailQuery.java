@@ -1,6 +1,6 @@
-package quri.teelab.api.teelab.usermanagement.domain.Model.queries;
+package quri.teelab.api.teelab.usermanagement.domain.model.queries;
 
-import quri.teelab.api.teelab.usermanagement.domain.Model.valueobjects.EmailAddress;
+import quri.teelab.api.teelab.usermanagement.domain.model.valueobjects.EmailAddress;
 
 /**
  * Query to get a profile by email

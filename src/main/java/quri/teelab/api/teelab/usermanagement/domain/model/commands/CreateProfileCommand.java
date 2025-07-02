@@ -1,4 +1,4 @@
-package quri.teelab.api.teelab.usermanagement.domain.Model.commands;
+package quri.teelab.api.teelab.usermanagement.domain.model.commands;
 
 /**
  * Create Profile Command 

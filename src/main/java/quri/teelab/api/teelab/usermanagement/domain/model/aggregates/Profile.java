@@ -1,13 +1,13 @@
-package quri.teelab.api.teelab.usermanagement.domain.Model.aggregates;
+package quri.teelab.api.teelab.usermanagement.domain.model.aggregates;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import quri.teelab.api.teelab.usermanagement.domain.Model.commands.CreateProfileCommand;
-import quri.teelab.api.teelab.usermanagement.domain.Model.valueobjects.EmailAddress;
-import quri.teelab.api.teelab.usermanagement.domain.Model.valueobjects.PersonName;
-import quri.teelab.api.teelab.usermanagement.domain.Model.valueobjects.StreetAddress;
+import quri.teelab.api.teelab.usermanagement.domain.model.commands.CreateProfileCommand;
+import quri.teelab.api.teelab.usermanagement.domain.model.valueobjects.EmailAddress;
+import quri.teelab.api.teelab.usermanagement.domain.model.valueobjects.PersonName;
+import quri.teelab.api.teelab.usermanagement.domain.model.valueobjects.StreetAddress;
 
 /**
  * Profile Aggregate Root 
