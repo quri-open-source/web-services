@@ -2,7 +2,6 @@ package quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform;
 
 import quri.teelab.api.teelab.orderprocessing.domain.model.commands.CreateOrderCommand;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources.CreateOrderResource;
-import quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources.ItemResource;
 import quri.teelab.api.teelab.orderprocessing.domain.model.entities.Item;
 import quri.teelab.api.teelab.shared.domain.model.valueobjects.Address;
 

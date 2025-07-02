@@ -23,7 +23,7 @@ public class ProjectQueryServiceImpl implements ProjectQueryService {
         // Validate if there is a Project With the given User ID
         if (!projectRepository.existsByUserId(query.userId())) {
             System.out.println("No projects found for user ID: " + query.userId());
-            throw new IllegalArgumentException("No projects found for the given user ID");
+            return List.of(); // Return an empty list if no projects are found
         }
 
         // Fetch all projects for the given User ID

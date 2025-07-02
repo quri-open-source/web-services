@@ -151,7 +151,7 @@ public class TokenServiceImpl implements BearerTokenService {
     }
 
     private String extractTokenFrom(String authorizationHeaderParameter) {
-        return authorizationHeaderParameter.substring(TOKEN_BEGIN_INDEX);
+        return authorizationHeaderParameter.substring(TOKEN_BEGIN_INDEX).trim();
     }
 
     private String getAuthorizationParameterFrom(HttpServletRequest request) {
