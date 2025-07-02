@@ -3,6 +3,7 @@ package quri.teelab.api.teelab.accesssecurity.interfaces.rest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,7 @@ public class AuthenticationController {
         summary = "Sign in",
         description = "Sign in a user"
     )
+    @SecurityRequirements // Remove security requirement for this endpoint
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "The user was authenticated"),
             @ApiResponse(responseCode = "401", description = "Invalid credentials"),
@@ -51,6 +53,8 @@ public class AuthenticationController {
                     authenticatedUser.user(), authenticatedUser.token());
             return ResponseEntity.ok(resource);
         } catch (RuntimeException e) {
+            System.err.println("Sign-in error: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(401).build();
         }
     }
@@ -65,6 +69,7 @@ public class AuthenticationController {
         summary = "Sign-up",
         description = "Sign up a new user"
     )
+    @SecurityRequirements // Remove security requirement for this endpoint
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "The user was created"),
             @ApiResponse(responseCode = "400", description = "Username already exists"),

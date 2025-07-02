@@ -20,7 +20,7 @@ public class FilterConfiguration {
                 new FilterRegistrationBean<>();
         
         registrationBean.setFilter(requestAuthorizationMiddleware);
-        registrationBean.addUrlPatterns("/api/*");
+        
         registrationBean.setOrder(1);
         
         return registrationBean;
