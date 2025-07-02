@@ -1,13 +1,14 @@
 package quri.teelab.api.teelab.orderprocessing.domain.services;
 
 import quri.teelab.api.teelab.orderprocessing.domain.model.aggregates.OrderProcessing;
-import quri.teelab.api.teelab.orderprocessing.domain.model.valueobjects.OrderId;
+import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrderByIdQuery;
+import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrdersByUserIdQuery;
+
 import java.util.List;
-import java.util.UUID;
 
 public interface OrderProcessingQueryService {
 
-    List<OrderProcessing> getOrdersByUser(UUID userId);
+    List<OrderProcessing> getOrdersByUser(GetOrdersByUserIdQuery query);
 
-    OrderProcessing getOrderById(OrderId orderId);
+    OrderProcessing getOrderById(GetOrderByIdQuery query);
 }

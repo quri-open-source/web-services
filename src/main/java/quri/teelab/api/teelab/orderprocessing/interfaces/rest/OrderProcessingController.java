@@ -9,17 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import quri.teelab.api.teelab.orderprocessing.domain.model.commands.CreateOrderCommand;
-import quri.teelab.api.teelab.orderprocessing.domain.model.commands.ProcessOrderCommand;
+import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrderByIdQuery;
+import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrdersByUserIdQuery;
 import quri.teelab.api.teelab.orderprocessing.domain.services.OrderProcessingCommandService;
 import quri.teelab.api.teelab.orderprocessing.domain.services.OrderProcessingQueryService;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources.CreateOrderResource;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources.OrderResource;
-import quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources.ProcessOrderResource;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform.CreateOrderCommandFromResourceAssembler;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform.OrderResourceAssembler;
-import quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform.ProcessOrderCommandFromResourceAssembler;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -45,12 +43,15 @@ public class OrderProcessingController {
             @ApiResponse(responseCode = "400", description = "Invalid user ID"),
             @ApiResponse(responseCode = "404", description = "No orders found")
     })
-    public ResponseEntity<List<OrderResource>> getOrdersByUser(@RequestParam("userId") UUID userId) {
-        var orders = queryService.getOrdersByUser(userId).stream()
+    public ResponseEntity<?> getOrdersByUser(@RequestParam("userId") UUID userId) {
+        var orders = queryService.getOrdersByUser(new GetOrdersByUserIdQuery(userId)).stream()
                 .map(OrderResourceAssembler::toResource)
                 .toList();
         
-        if (orders.isEmpty()) return ResponseEntity.notFound().build();
+        if (orders.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("This user does not have any orders.");
+        }
         return ResponseEntity.ok(orders);
     }
 
@@ -60,14 +61,15 @@ public class OrderProcessingController {
             @ApiResponse(responseCode = "200", description = "Order found"),
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
-    public ResponseEntity<OrderResource> getOrderById(@PathVariable UUID orderId) {
+    public ResponseEntity<?> getOrderById(@PathVariable UUID orderId) {
         try {
             OrderResource resource = OrderResourceAssembler.toResource(
-                    queryService.getOrderById(quri.teelab.api.teelab.orderprocessing.domain.model.valueobjects.OrderId.of(orderId))
+                    queryService.getOrderById(new GetOrderByIdQuery(orderId))
             );
             return ResponseEntity.ok(resource);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No order found with the provided ID.");
         }
     }
 
@@ -87,21 +89,4 @@ public class OrderProcessingController {
         }
     }
 
-    @PutMapping("/{orderId}")
-    @Operation(summary = "Process order", description = "Process an existing order")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Order processed successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data"),
-            @ApiResponse(responseCode = "404", description = "Order not found")
-    })
-    public ResponseEntity<Void> processOrder(@PathVariable UUID orderId,
-                                             @Valid @RequestBody ProcessOrderResource resource) {
-        try {
-            ProcessOrderCommand cmd = ProcessOrderCommandFromResourceAssembler.toCommand(resource);
-            commandService.processOrder(cmd);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
 }

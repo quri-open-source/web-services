@@ -1,8 +1,8 @@
 package quri.teelab.api.teelab.orderprocessing.infrastructure.persistence.jpa.repositories;
 
-import quri.teelab.api.teelab.orderprocessing.domain.model.aggregates.OrderProcessing;
-import quri.teelab.api.teelab.orderprocessing.domain.model.valueobjects.OrderId;
 import org.springframework.data.jpa.repository.JpaRepository;
+import quri.teelab.api.teelab.orderprocessing.domain.model.aggregates.OrderProcessing;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -11,6 +11,6 @@ import java.util.UUID;
  */
 
 public interface OrderProcessingRepository
-        extends JpaRepository<OrderProcessing, OrderId> {
+        extends JpaRepository<OrderProcessing, UUID> {
     List<OrderProcessing> findAllByUserId(UUID userId);
 }

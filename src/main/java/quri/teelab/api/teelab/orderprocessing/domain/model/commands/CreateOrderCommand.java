@@ -1,9 +1,9 @@
 package quri.teelab.api.teelab.orderprocessing.domain.model.commands;
 
+import quri.teelab.api.teelab.orderprocessing.domain.model.entities.Item;
+
 import java.util.List;
 import java.util.UUID;
-import quri.teelab.api.teelab.shared.domain.model.valueobjects.Address;
-import quri.teelab.api.teelab.orderprocessing.domain.model.entities.Item;
 
 /**
  * Create new processing order command
@@ -11,27 +11,20 @@ import quri.teelab.api.teelab.orderprocessing.domain.model.entities.Item;
  */
 
 public class CreateOrderCommand {
-    private final UUID orderId;
-    private final UUID userId;
-    private final Address shippingAddress;
-    private final List<Item> items;
-    private final String description;
 
-    public CreateOrderCommand(UUID orderId,
+    private final UUID userId;
+    private final List<Item> items;
+
+    public CreateOrderCommand(
                               UUID userId,
-                              Address shippingAddress,
-                              List<Item> items,
-                              String description) {
-        this.orderId        = orderId;
+                              List<Item> items) {
+
         this.userId         = userId;
-        this.shippingAddress= shippingAddress;
         this.items          = items;
-        this.description    = description;
     }
 
-    public UUID getOrderId()         { return orderId; }
+
     public UUID getUserId()          { return userId; }
-    public Address getShippingAddress() { return shippingAddress; }
     public List<Item> getItems()     { return items; }
-    public String getDescription()   { return description; }
+
 }

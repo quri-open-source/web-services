@@ -7,7 +7,6 @@ import quri.teelab.api.teelab.orderprocessing.domain.model.aggregates.OrderProce
 import quri.teelab.api.teelab.orderprocessing.domain.model.commands.CreateOrderCommand;
 import quri.teelab.api.teelab.orderprocessing.domain.model.commands.ProcessOrderCommand;
 import quri.teelab.api.teelab.orderprocessing.domain.services.OrderProcessingCommandService;
-import quri.teelab.api.teelab.orderprocessing.domain.model.valueobjects.OrderId;
 import quri.teelab.api.teelab.orderprocessing.infrastructure.persistence.jpa.repositories.OrderProcessingRepository;
 @Service
 @Transactional
@@ -28,11 +27,10 @@ public class OrderProcessingCommandServiceImpl implements OrderProcessingCommand
 
     @Override
     public void processOrder(ProcessOrderCommand command) {
-        OrderId oid = OrderId.of(command.getOrderId());
-        OrderProcessing order = repository.findById(oid)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found: " + oid));
+
+        OrderProcessing order = repository.findById(command.getOrderId())
+                .orElseThrow(() -> new EntityNotFoundException("Order not found: " + command.getOrderId()));
         // Process the order with the provided payment method
-        order.process(command.getPaymentMethod());
         repository.save(order);
     }
 }
