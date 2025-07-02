@@ -7,6 +7,6 @@ import quri.teelab.api.teelab.iam.interfaces.rest.resources.UserResource;
 public class UserResourceFromEntityAssembler {
     public static UserResource toResourceFromEntity(User user) {
         var roles = user.getRoles().stream().map(Role::getStringName).toList();
-        return new UserResource(user.getId(), user.getUsername(), roles);
+        return new UserResource(user.getId().toString(), user.getUsername(), roles);
     }
 }

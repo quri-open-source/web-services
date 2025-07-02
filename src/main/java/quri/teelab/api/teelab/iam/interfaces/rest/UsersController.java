@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * This class is a REST controller that exposes the users resource.
@@ -64,8 +65,8 @@ public class UsersController {
             @ApiResponse(responseCode = "200", description = "User retrieved successfully."),
             @ApiResponse(responseCode = "404", description = "User not found."),
             @ApiResponse(responseCode = "401", description = "Unauthorized.")})
-    public ResponseEntity<UserResource> getUserById(@PathVariable Long userId) {
-        var getUserByIdQuery = new GetUserByIdQuery(userId);
+    public ResponseEntity<UserResource> getUserById(@PathVariable String userId) {
+        var getUserByIdQuery = new GetUserByIdQuery(UUID.fromString(userId));
         var user = userQueryService.handle(getUserByIdQuery);
         if (user.isEmpty()) {
             return ResponseEntity.notFound().build();

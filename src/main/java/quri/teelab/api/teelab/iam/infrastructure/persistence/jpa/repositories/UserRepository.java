@@ -5,13 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * This interface is responsible for providing the User entity related operations.
  * It extends the JpaRepository interface.
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>
+public interface UserRepository extends JpaRepository<User, UUID>
 {
     /**
      * This method is responsible for finding the user by username.

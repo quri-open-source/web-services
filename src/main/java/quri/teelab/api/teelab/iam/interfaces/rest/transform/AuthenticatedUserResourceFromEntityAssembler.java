@@ -5,6 +5,6 @@ import quri.teelab.api.teelab.iam.interfaces.rest.resources.AuthenticatedUserRes
 
 public class AuthenticatedUserResourceFromEntityAssembler {
     public static AuthenticatedUserResource toResourceFromEntity(User user, String token) {
-        return new AuthenticatedUserResource(user.getId(), user.getUsername(), token);
+        return new AuthenticatedUserResource(user.getId().toString(), user.getUsername(), token);
     }
 }
