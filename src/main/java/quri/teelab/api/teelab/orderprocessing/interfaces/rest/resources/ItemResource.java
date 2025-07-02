@@ -1,6 +1,5 @@
 package quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
@@ -12,6 +11,6 @@ import java.util.UUID;
 public record ItemResource(
     UUID id,
     UUID projectId,
-    int quantity,
-    BigDecimal unitPrice
+    int quantity
+
 ) {}

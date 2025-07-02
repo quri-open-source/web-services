@@ -1,7 +1,5 @@
 package quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,13 +11,5 @@ import java.util.UUID;
 public record OrderResource(
         UUID id,
         UUID userId,
-        Date createdAt,
-        String status,
-        BigDecimal totalAmount,
-        String transactionId,
-        String description,
-        AddressResource shippingAddress,
-        List<DiscountResource> appliedDiscounts,
         List<ItemResource> items
-) {
-}
+) {}
