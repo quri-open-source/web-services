@@ -7,18 +7,15 @@ import quri.teelab.api.teelab.designlab.domain.model.entities.ImageLayer;
 import quri.teelab.api.teelab.designlab.domain.model.entities.TextLayer;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.LayerId;
 import quri.teelab.api.teelab.designlab.domain.services.LayerCommandService;
-import quri.teelab.api.teelab.designlab.infrastructure.cloudinary.CloudinaryService;
 import quri.teelab.api.teelab.designlab.infrastructure.persistence.jpa.repositories.LayerRepository;
 import quri.teelab.api.teelab.designlab.infrastructure.persistence.jpa.repositories.ProjectRepository;
 
 @Service
 public class LayerCommandServiceImpl implements LayerCommandService {
     private final ProjectRepository projectRepository;
-    private final CloudinaryService cloudinaryService;
 
-    public LayerCommandServiceImpl(ProjectRepository projectRepository, CloudinaryService cloudinaryService) {
+    public LayerCommandServiceImpl(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
-        this.cloudinaryService = cloudinaryService;
     }
 
     @Override
@@ -39,14 +36,18 @@ public class LayerCommandServiceImpl implements LayerCommandService {
                 .findById(command.projectId())
                 .orElseThrow(() -> new IllegalArgumentException("Project with ID " + command.projectId() + " does not exist."));
 
-        String imageUrl = command.imageUrl().getAbsolutePath();
-        var image = cloudinaryService.uploadImage(imageUrl);
-
-        if (image.isEmpty()) {
-            throw new IllegalArgumentException("Failed to upload image to Cloudinary.");
+        // Validate image URL
+        String imageUrl = command.imageUrl();
+        if (imageUrl == null || imageUrl.trim().isEmpty()) {
+            throw new IllegalArgumentException("Image URL cannot be null or empty.");
         }
 
-        var layer = new ImageLayer(command, image.get());
+        // Basic URL validation
+        if (!imageUrl.startsWith("http://") && !imageUrl.startsWith("https://")) {
+            throw new IllegalArgumentException("Image URL must be a valid HTTP or HTTPS URL.");
+        }
+
+        var layer = new ImageLayer(command, imageUrl);
 
         project.addLayer(layer);
         projectRepository.save(project);
