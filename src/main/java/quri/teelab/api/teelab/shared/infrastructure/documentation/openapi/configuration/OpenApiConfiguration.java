@@ -1,6 +1,7 @@
 package quri.teelab.api.teelab.shared.infrastructure.documentation.openapi.configuration;
 
 import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,35 +20,44 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfiguration {
 
+    @Value("${spring.application.name")
+    String applicationName;
+
+    @Value("${documentation.application.description}")
+    String applicationDescription;
+
+    @Value("${documentation.application.version}")
+    String applicationVersion;
+
+
     @Bean
     public OpenAPI teeLabOpenApi() {
         // Define JWT Bearer token security scheme
-        var jwtSecurityScheme = new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP)
-                .scheme("bearer")
-                .bearerFormat("JWT")
-                .description("JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"");
+        var openApi = new OpenAPI();
 
-        return new OpenAPI()
-                .info(new Info()
-                        .title("TeeLab API")
-                        .description("Sistema de gestión para TeeLab - API REST para el manejo de usuarios, diseños, catálogo de productos y análisis")
-                        .version("1.0.0")
-                        .contact(new Contact()
-                                .name("TeeLab Development Team")
-                                .email("support@teelab.com"))
-                        .license(new License()
-                                .name("MIT License")
-                                .url("https://opensource.org/licenses/MIT")))
-                .addServersItem(new Server()
-                        .url("http://localhost:8080")
-                        .description("Development server"))
-                .addServersItem(new Server()
-                        .url("https://api.teelab.com")
-                        .description("Production server"))
+
+        openApi.info(new Info()
+                .title(this.applicationName)
+                .description(this.applicationDescription)
+                .version(this.applicationVersion)
+                .license(new License().name("Apache 2.0")
+                .url("http://www.apache.org/licenses/LICENSE-2.0"))).externalDocs(
+                        new ExternalDocumentation().description("TeeLab wiki Documentation")
+                        .url("https://teelab.wiki.github.io/docs"));
+
+        final String securitySchemeName = "bearerAuth";
+
+        openApi.addSecurityItem(new SecurityRequirement()
+                        .addList(securitySchemeName))
                 .components(new Components()
-                        .addSecuritySchemes("bearerAuth", jwtSecurityScheme))
-                // Apply JWT security globally to all endpoints (except those explicitly excluded)
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
+                        .addSecuritySchemes(securitySchemeName,
+                                new SecurityScheme()
+                                        .name(securitySchemeName)
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")));
+
+
+        return openApi;
     }
 }
