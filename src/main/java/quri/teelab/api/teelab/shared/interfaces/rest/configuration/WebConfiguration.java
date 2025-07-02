@@ -1,4 +1,4 @@
-package quri.teelab.api.teelab.shared.configuration;
+package quri.teelab.api.teelab.shared.interfaces.rest.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
