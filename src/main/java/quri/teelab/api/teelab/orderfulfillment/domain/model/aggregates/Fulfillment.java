@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Fulfillment extends AuditableAbstractAggregateRoot<Fulfillment> {
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "order_id", nullable = false, columnDefinition = "UUID"))
+    @AttributeOverride(name = "value", column = @Column(name = "order_id", nullable = false))
     private OrderId orderId;
 
     @Enumerated(EnumType.STRING)

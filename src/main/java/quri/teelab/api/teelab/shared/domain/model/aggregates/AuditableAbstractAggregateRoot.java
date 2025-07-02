@@ -25,7 +25,6 @@ public abstract class AuditableAbstractAggregateRoot<T extends AbstractAggregate
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "UUID")
     private UUID id;
 
     @CreatedDate
