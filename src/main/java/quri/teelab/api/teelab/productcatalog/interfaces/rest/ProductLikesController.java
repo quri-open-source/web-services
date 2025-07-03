@@ -12,8 +12,14 @@ import quri.teelab.api.teelab.productcatalog.domain.model.commands.UnlikeProduct
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.CheckIfUserLikedProductQuery;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetLikeCountByProductQuery;
 import quri.teelab.api.teelab.productcatalog.domain.services.ProductLikeService;
+import quri.teelab.api.teelab.productcatalog.interfaces.rest.resources.ProductLikeCountResource;
+import quri.teelab.api.teelab.productcatalog.interfaces.rest.resources.ProductLikeStatusResource;
+import quri.teelab.api.teelab.productcatalog.interfaces.rest.resources.ProductUserLikeStatusResource;
+import quri.teelab.api.teelab.productcatalog.interfaces.rest.transform.ProductLikeCountResourceAssembler;
+import quri.teelab.api.teelab.productcatalog.interfaces.rest.transform.ProductLikeStatusResourceAssembler;
+import quri.teelab.api.teelab.productcatalog.interfaces.rest.transform.ProductUserLikeStatusResourceAssembler;
+import quri.teelab.api.teelab.shared.interfaces.rest.resources.ErrorResource;
 
-import java.util.Map;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -40,7 +46,7 @@ public class ProductLikesController {
             @ApiResponse(responseCode = "404", description = "Product not found"),
             @ApiResponse(responseCode = "400", description = "Invalid request")
     })
-    public ResponseEntity<Map<String, Object>> likeProduct(
+    public ResponseEntity<?> likeProduct(
             @Parameter(description = "Product ID to like", required = true) 
             @PathVariable UUID productId,
             @Parameter(description = "User ID who wants to like", required = true)
@@ -52,28 +58,22 @@ public class ProductLikesController {
             
             if (isAlreadyLiked) {
                 // User has already liked this product
-                return ResponseEntity.status(409).body(Map.of(
-                    "message", "Product already liked by user",
-                    "productId", productId,
-                    "userId", userId
-                ));
+                var resource = ProductLikeStatusResourceAssembler.toAlreadyLikedResource(productId, userId);
+                return ResponseEntity.status(409).body(resource);
             }
             
             // User hasn't liked yet, proceed with creation
             var command = new LikeProductCommand(productId, userId);
             productLikeService.handle(command);
             
-            return ResponseEntity.status(201).body(Map.of(
-                "message", "Product liked successfully",
-                "productId", productId,
-                "userId", userId
-            ));
+            var resource = ProductLikeStatusResourceAssembler.toLikeSuccessResource(productId, userId);
+            return ResponseEntity.status(201).body(resource);
             
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError()
-                .body(Map.of("error", "Internal server error: " + e.getMessage()));
+            var errorResource = new ErrorResource("Internal server error: " + e.getMessage(), "Internal Server Error", 500);
+            return ResponseEntity.internalServerError().body(errorResource);
         }
     }
 
@@ -120,17 +120,19 @@ public class ProductLikesController {
             @ApiResponse(responseCode = "200", description = "Like count retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
-    public ResponseEntity<Map<String, Long>> getLikeCount(
+    public ResponseEntity<ProductLikeCountResource> getLikeCount(
             @Parameter(description = "Product ID to get like count for", required = true)
             @PathVariable UUID productId) {
         try {
             var query = new GetLikeCountByProductQuery(productId);
             Long likeCount = productLikeService.handle(query);
             
-            return ResponseEntity.ok(Map.of("likeCount", likeCount));
+            var resource = ProductLikeCountResourceAssembler.toResourceFromCount(likeCount);
+            return ResponseEntity.ok(resource);
             
         } catch (Exception e) {
-            return ResponseEntity.ok(Map.of("likeCount", 0L));
+            var resource = ProductLikeCountResourceAssembler.toResourceFromCount(0L);
+            return ResponseEntity.ok(resource);
         }
     }
 
@@ -143,7 +145,7 @@ public class ProductLikesController {
             @ApiResponse(responseCode = "200", description = "Like status retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
-    public ResponseEntity<Map<String, Boolean>> checkIfUserLiked(
+    public ResponseEntity<ProductUserLikeStatusResource> checkIfUserLiked(
             @Parameter(description = "Product ID to check", required = true)
             @PathVariable UUID productId,
             @Parameter(description = "User ID to check", required = true)
@@ -152,10 +154,12 @@ public class ProductLikesController {
             var query = new CheckIfUserLikedProductQuery(productId, userId);
             Boolean isLiked = productLikeService.handle(query);
             
-            return ResponseEntity.ok(Map.of("isLiked", isLiked));
+            var resource = ProductUserLikeStatusResourceAssembler.toResourceFromStatus(isLiked);
+            return ResponseEntity.ok(resource);
             
         } catch (Exception e) {
-            return ResponseEntity.ok(Map.of("isLiked", false));
+            var resource = ProductUserLikeStatusResourceAssembler.toResourceFromStatus(false);
+            return ResponseEntity.ok(resource);
         }
     }
 }
