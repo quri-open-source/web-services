@@ -7,6 +7,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import quri.teelab.api.teelab.orderfulfillment.domain.model.queries.GetManufacturerByUserIdQuery;
+import quri.teelab.api.teelab.orderfulfillment.domain.model.valueobjects.UserId;
+import quri.teelab.api.teelab.orderfulfillment.domain.services.ManufacturerQueryService;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetAllProductsQuery;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetProductByIdQuery;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetProductsByProjectIdQuery;
@@ -31,10 +34,14 @@ public class ProductsController {
 
     private final ProductCommandService productCommandService;
     private final ProductQueryService productQueryService;
+    private final ManufacturerQueryService manufacturerQueryService;
 
-    public ProductsController(ProductCommandService productCommandService, ProductQueryService productQueryService) {
+    public ProductsController(ProductCommandService productCommandService, 
+                             ProductQueryService productQueryService,
+                             ManufacturerQueryService manufacturerQueryService) {
         this.productCommandService = productCommandService;
         this.productQueryService = productQueryService;
+        this.manufacturerQueryService = manufacturerQueryService;
     }
 
     @GetMapping
@@ -90,10 +97,22 @@ public class ProductsController {
     @Operation(summary = "Create product", description = "Create a new product in the catalog")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Product created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data")
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "404", description = "Manufacturer not found for the given user")
     })
     public ResponseEntity<ProductResource> createProduct(@RequestBody CreateProductResource resource) {
-        var createProductCommand = CreateProductCommandFromResourceAssembler.toCommandFromResource(resource);
+        // First, find the manufacturer by userId
+        var userId = new UserId(UUID.fromString(resource.userId()));
+        var manufacturerQuery = new GetManufacturerByUserIdQuery(userId);
+        var manufacturer = manufacturerQueryService.handle(manufacturerQuery);
+        
+        if (manufacturer.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Manufacturer not found for this user
+        }
+        
+        // Create the product command with the found manufacturerId
+        var createProductCommand = CreateProductCommandFromResourceAssembler.toCommandFromResource(
+                resource, manufacturer.get().getId());
         var productId = productCommandService.handle(createProductCommand);
 
         if (productId == null) return ResponseEntity.badRequest().build();

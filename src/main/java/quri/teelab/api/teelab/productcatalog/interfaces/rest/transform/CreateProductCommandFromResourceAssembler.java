@@ -1,6 +1,7 @@
 package quri.teelab.api.teelab.productcatalog.interfaces.rest.transform;
 
 import java.util.Currency;
+import java.util.UUID;
 
 import quri.teelab.api.teelab.productcatalog.domain.model.commands.CreateProductCommand;
 import quri.teelab.api.teelab.productcatalog.domain.model.valueobjects.ManufacturerId;
@@ -14,14 +15,14 @@ import quri.teelab.api.teelab.productcatalog.interfaces.rest.resources.CreatePro
  */
 public class CreateProductCommandFromResourceAssembler {
 
-    public static CreateProductCommand toCommandFromResource(CreateProductResource resource) {
+    public static CreateProductCommand toCommandFromResource(CreateProductResource resource, UUID manufacturerId) {
         Currency currency = Currency.getInstance(
                 resource.currency() != null ? resource.currency() : Money.DEFAULT_CURRENCY.getCurrencyCode()
         );
 
         return new CreateProductCommand(
                 ProjectId.of(resource.projectId()),
-                ManufacturerId.of(resource.manufacturerId()),
+                ManufacturerId.of(manufacturerId.toString()),
                 new Money(resource.price(), currency),
                 resource.tags(),
                 resource.gallery(),

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public record CreateProductResource(
         String projectId,
-        String manufacturerId,
+        String userId,  // Changed from manufacturerId to userId
         BigDecimal price,
         String currency,
         List<String> tags,
