@@ -11,4 +11,5 @@ import java.util.UUID;
 @Repository
 public interface ManufacturerRepository extends JpaRepository<Manufacturer, UUID> {
     Optional<Manufacturer> findByUserId(UserId userId);
+    boolean existsByUserId(UserId userId);
 }
