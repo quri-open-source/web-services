@@ -52,5 +52,12 @@ public class FulfillmentItem {
         }
         this.status = FulfillmentItemStatus.RECEIVED;
     }
+
+    public void markAsCancelled() {
+        if (this.status != FulfillmentItemStatus.PENDING) {
+            throw new IllegalStateException("Only pending items can be cancelled.");
+        }
+        this.status = FulfillmentItemStatus.CANCELLED;
+    }
 }
 
