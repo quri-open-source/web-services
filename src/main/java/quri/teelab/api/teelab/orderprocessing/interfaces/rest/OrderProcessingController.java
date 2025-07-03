@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import quri.teelab.api.teelab.orderprocessing.domain.model.aggregates.OrderProcessing;
 import quri.teelab.api.teelab.orderprocessing.domain.model.commands.CreateOrderCommand;
 import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrderByIdQuery;
 import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrdersByUserIdQuery;
@@ -79,13 +80,15 @@ public class OrderProcessingController {
             @ApiResponse(responseCode = "201", description = "Order created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
-    public ResponseEntity<Void> createOrder(@Valid @RequestBody CreateOrderResource resource) {
+    public ResponseEntity<?> createOrder(@Valid @RequestBody CreateOrderResource resource) {
         try {
             CreateOrderCommand cmd = CreateOrderCommandFromResourceAssembler.toCommand(resource);
-            commandService.createOrder(cmd);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            OrderProcessing createdOrder = commandService.createOrder(cmd);
+            OrderResource orderResource = OrderResourceAssembler.toResource(createdOrder);
+            return ResponseEntity.status(HttpStatus.CREATED).body(orderResource);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            // Return error message for debugging
+            return ResponseEntity.badRequest().body("Error creating order: " + e.getMessage());
         }
     }
 
