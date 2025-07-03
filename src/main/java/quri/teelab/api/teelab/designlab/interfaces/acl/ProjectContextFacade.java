@@ -59,4 +59,21 @@ public interface ProjectContextFacade {
      * @return The count of layers in the project
      */
     long getLayerCountByProjectId(UUID projectId);
+
+    /**
+     * Retrieves essential project details for product catalog integration.
+     * @param projectId The unique identifier of the project
+     * @return ProjectDetailsInfo containing title, userId, projectId, and previewUrl; null if project not found
+     */
+    ProjectDetailsInfo fetchProjectDetailsForProduct(UUID projectId);
+
+    /**
+     * Data transfer object for project details needed by product catalog.
+     */
+    record ProjectDetailsInfo(
+            UUID projectId,
+            String title,
+            UUID userId,
+            String previewUrl
+    ) {}
 }

@@ -9,13 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import quri.teelab.api.teelab.designlab.domain.model.queries.GetAllProjectsByUserIdQuery;
 import quri.teelab.api.teelab.designlab.domain.model.queries.GetProjectByIdQuery;
+import quri.teelab.api.teelab.designlab.domain.model.queries.GetProjectDetailsForProductQuery;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.ProjectId;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.UserId;
 import quri.teelab.api.teelab.designlab.domain.services.ProjectCommandService;
 import quri.teelab.api.teelab.designlab.domain.services.ProjectQueryService;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.CreateProjectResource;
+import quri.teelab.api.teelab.designlab.interfaces.rest.resources.ProjectDetailsResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.ProjectResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.transform.CreateProjectCommandFromResourceAssembler;
+import quri.teelab.api.teelab.designlab.interfaces.rest.transform.ProjectDetailsResourceFromEntityAssembler;
 import quri.teelab.api.teelab.designlab.interfaces.rest.transform.ProjectResourceFromEntityAssembler;
 import quri.teelab.api.teelab.shared.interfaces.rest.resources.ErrorResource;
 import quri.teelab.api.teelab.shared.interfaces.rest.resources.SuccessMessage;
@@ -120,6 +123,31 @@ public class ProjectsController {
             return new ResponseEntity<>(projectResource, HttpStatus.CREATED);
         } catch (Exception e) {
             return errorResponse("Error creating project: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{projectId}/details")
+    @Operation(summary = "Get project details for product", description = "Get essential project details needed for product catalog integration")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Project details retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Project not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid project ID format")
+    })
+    public ResponseEntity<?> getProjectDetailsForProduct(@PathVariable String projectId) {
+        try {
+            var query = new GetProjectDetailsForProductQuery(ProjectId.of(projectId));
+            var project = projectQueryService.handle(query);
+
+            if (project == null) {
+                return errorResponse("Project not found with ID: " + projectId, HttpStatus.NOT_FOUND);
+            }
+
+            var projectDetailsResource = ProjectDetailsResourceFromEntityAssembler.toResourceFromEntity(project);
+            return ResponseEntity.ok(projectDetailsResource);
+        } catch (IllegalArgumentException e) {
+            return errorResponse("Invalid project ID format: " + projectId, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return errorResponse("Error retrieving project details: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

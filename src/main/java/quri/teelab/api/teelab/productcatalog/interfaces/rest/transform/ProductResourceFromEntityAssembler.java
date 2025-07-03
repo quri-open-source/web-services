@@ -3,7 +3,7 @@ package quri.teelab.api.teelab.productcatalog.interfaces.rest.transform;
 import quri.teelab.api.teelab.productcatalog.domain.model.aggregates.Product;
 import quri.teelab.api.teelab.productcatalog.interfaces.rest.resources.ProductResource;
 
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 /**
  * Transforms Product domain entities to ProductResource DTOs.
@@ -13,17 +13,17 @@ public class ProductResourceFromEntityAssembler {
 
     public static ProductResource toResourceFromEntity(Product entity) {
         return new ProductResource(
-                entity.getId().toString(),
-                entity.getProjectId().value(),
-                entity.getManufacturerId().value(),
+                entity.getId(),
+                UUID.fromString(entity.getProjectId().value()),
                 entity.getPrice().amount(),
                 entity.getPrice().currency().getCurrencyCode(),
-                entity.getLikes(),
-                entity.getTags(),
+                entity.getStatus().toString(),
+                entity.getProjectTitle(),
+                entity.getProjectPreviewUrl(),
+                entity.getProjectUserId(),
+                entity.getLikeCount(),
                 entity.getCreatedAt(),
-                entity.getGallery(),
-                entity.getRating(),
-                entity.getStatus()
+                entity.getUpdatedAt()
         );
     }
 }

@@ -1,11 +1,9 @@
 package quri.teelab.api.teelab.productcatalog.interfaces.acl;
 
-import quri.teelab.api.teelab.productcatalog.domain.model.valueobjects.ManufacturerId;
-import quri.teelab.api.teelab.productcatalog.domain.model.valueobjects.ProjectId;
+import quri.teelab.api.teelab.productcatalog.domain.model.valueobjects.ProductStatus;
 import quri.teelab.api.teelab.shared.domain.model.valueobjects.Money;
 
 import java.math.BigDecimal;
-import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,20 +18,16 @@ import java.util.UUID;
 public interface ProductCatalogContextFacade {
 
     /**
-     * Create a new product
+     * Create a new product based on a project
      *
      * @param projectId      The ID of the project this product is associated with
-     * @param manufacturerId The ID of the manufacturer
      * @param price          The price amount
      * @param currency       The price currency
-     * @param tags           List of product tags
-     * @param gallery        List of image URLs for the product gallery
      * @param status         The product status
      * @return The created product ID
      */
-    UUID createProduct(String projectId, String manufacturerId,
+    UUID createProduct(String projectId,
                        java.math.BigDecimal price, String currency,
-                       List<String> tags, List<String> gallery,
                        String status);
 
     /**
@@ -71,27 +65,25 @@ public interface ProductCatalogContextFacade {
     boolean updateProductPrice(UUID productId, java.math.BigDecimal price, String currency);
 
     /**
-     * Search products by tags
+     * Check if a project has any products
      *
-     * @param tags List of tags to search for
-     * @return List of matching product IDs
+     * @param projectId The project ID
+     * @return True if project has products, false otherwise
      */
-    List<UUID> searchProductsByTags(List<String> tags);
+    boolean projectHasProducts(String projectId);
 
     /**
      * Value object for transferring product information across bounded contexts
      */
     record ProductInfo(
             UUID id,
-            ProjectId projectId,
-            ManufacturerId manufacturerId,
-            Money priceAmount,
-            Currency currency,
-            Integer likes,
-            List<String> tags,
-            List<String> gallery,
-            Double rating,
-            String status
+            UUID projectId,
+            Money price,
+            ProductStatus status,
+            String projectTitle,
+            String projectPreviewUrl,
+            UUID projectUserId,
+            Long likeCount
     ) {
     }
 }

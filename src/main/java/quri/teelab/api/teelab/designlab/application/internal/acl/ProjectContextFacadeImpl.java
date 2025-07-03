@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import quri.teelab.api.teelab.designlab.domain.model.queries.GetAllProjectsByUserIdQuery;
 import quri.teelab.api.teelab.designlab.domain.model.queries.GetLayerByIdQuery;
 import quri.teelab.api.teelab.designlab.domain.model.queries.GetProjectByIdQuery;
+import quri.teelab.api.teelab.designlab.domain.model.queries.GetProjectDetailsForProductQuery;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.LayerId;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.ProjectId;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.UserId;
@@ -99,6 +100,24 @@ public class ProjectContextFacadeImpl implements ProjectContextFacade {
         } catch (IllegalArgumentException e) {
             // Project not found
             return 0L;
+        }
+    }
+
+    @Override
+    public ProjectContextFacade.ProjectDetailsInfo fetchProjectDetailsForProduct(UUID projectId) {
+        try {
+            var query = new GetProjectDetailsForProductQuery(ProjectId.of(projectId.toString()));
+            var project = projectQueryService.handle(query);
+            
+            return new ProjectContextFacade.ProjectDetailsInfo(
+                    project.getId().projectId(),
+                    project.getTitle(),
+                    project.getUserId().userId(),
+                    project.getPreviewUrl()
+            );
+        } catch (IllegalArgumentException e) {
+            // Project not found
+            return null;
         }
     }
 }

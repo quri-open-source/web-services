@@ -3,7 +3,9 @@ package quri.teelab.api.teelab.productcatalog.application.internal.commandservic
 import org.springframework.stereotype.Service;
 import quri.teelab.api.teelab.productcatalog.domain.model.aggregates.Product;
 import quri.teelab.api.teelab.productcatalog.domain.model.commands.CreateProductCommand;
+import quri.teelab.api.teelab.productcatalog.domain.model.commands.DeleteProductCommand;
 import quri.teelab.api.teelab.productcatalog.domain.model.commands.UpdateProductPriceCommand;
+import quri.teelab.api.teelab.productcatalog.domain.model.commands.UpdateProductStatusCommand;
 import quri.teelab.api.teelab.productcatalog.domain.services.ProductCommandService;
 import quri.teelab.api.teelab.productcatalog.infrastructure.persistence.jpa.repositories.ProductRepository;
 
@@ -33,6 +35,27 @@ public class ProductCommandServiceImpl implements ProductCommandService {
             Product product = productOptional.get();
             product.updatePrice(command.price());
             productRepository.save(product);
+        } else {
+            throw new IllegalArgumentException("Product not found with ID: " + command.productId());
+        }
+    }
+
+    @Override
+    public void handle(UpdateProductStatusCommand command) {
+        Optional<Product> productOptional = productRepository.findById(command.productId());
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            product.updateStatus(command.status());
+            productRepository.save(product);
+        } else {
+            throw new IllegalArgumentException("Product not found with ID: " + command.productId());
+        }
+    }
+
+    @Override
+    public void handle(DeleteProductCommand command) {
+        if (productRepository.existsById(command.productId())) {
+            productRepository.deleteById(command.productId());
         } else {
             throw new IllegalArgumentException("Product not found with ID: " + command.productId());
         }

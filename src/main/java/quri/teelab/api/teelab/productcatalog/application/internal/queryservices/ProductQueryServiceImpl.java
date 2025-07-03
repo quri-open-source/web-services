@@ -5,7 +5,6 @@ import quri.teelab.api.teelab.productcatalog.domain.model.aggregates.Product;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetAllProductsQuery;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetProductByIdQuery;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetProductsByProjectIdQuery;
-import quri.teelab.api.teelab.productcatalog.domain.model.queries.SearchProductsByTagsQuery;
 import quri.teelab.api.teelab.productcatalog.domain.services.ProductQueryService;
 import quri.teelab.api.teelab.productcatalog.infrastructure.persistence.jpa.repositories.ProductRepository;
 
@@ -34,11 +33,5 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     @Override
     public List<Product> handle(GetProductsByProjectIdQuery query) {
         return productRepository.findByProjectId(query.projectId().value());
-    }
-
-    @Override
-    public List<Product> handle(SearchProductsByTagsQuery query) {
-        // Find products that have at least one of the tags in the query
-        return productRepository.findByTagsIn(query.tags());
     }
 }
