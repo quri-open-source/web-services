@@ -17,7 +17,7 @@ public class OrderResourceAssembler {
                 order.getItems().stream()
                         .map(i -> new ItemResource(
                                 i.getId(),
-                                i.getProjectId(),
+                                i.getProductId(),
                                 i.getQuantity()
                         ))
                         .collect(Collectors.toList())

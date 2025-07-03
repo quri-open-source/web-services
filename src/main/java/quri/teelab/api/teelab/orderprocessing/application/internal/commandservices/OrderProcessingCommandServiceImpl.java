@@ -19,10 +19,10 @@ public class OrderProcessingCommandServiceImpl implements OrderProcessingCommand
     }
 
     @Override
-    public void createOrder(CreateOrderCommand command) {
+    public OrderProcessing createOrder(CreateOrderCommand command) {
         // Create and persist a new OrderProcessing aggregate
         OrderProcessing order = new OrderProcessing(command);
-        repository.save(order);
+        return repository.save(order);
     }
 
     @Override

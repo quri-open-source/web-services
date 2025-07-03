@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public record ItemResource(
     UUID id,
-    UUID projectId,
+    UUID productId,
     int quantity
 
 ) {}

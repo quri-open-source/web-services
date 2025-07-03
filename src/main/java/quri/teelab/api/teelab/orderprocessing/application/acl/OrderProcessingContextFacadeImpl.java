@@ -25,7 +25,7 @@ public class OrderProcessingContextFacadeImpl implements OrderProcessingContextF
                 .flatMap(order -> order.getItems().stream().map(item -> new OrderDto(
                         order.getId(),
                         order.getUserId(),
-                        item.getProjectId(),
+                        item.getProductId(),
                         item.getQuantity(),
                         item.getId()
                 )))
@@ -40,7 +40,7 @@ public class OrderProcessingContextFacadeImpl implements OrderProcessingContextF
         return new OrderDto(
                 order.getId(),
                 order.getUserId(),
-                item.getProjectId(),
+                item.getProductId(),
                 item.getQuantity(),
                 item.getId()
         );

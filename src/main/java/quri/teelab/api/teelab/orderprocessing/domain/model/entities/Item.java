@@ -14,20 +14,23 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private UUID projectId;
+    private UUID productId;
     private int quantity;
 
     protected Item() { }
 
     public Item(UUID id,
-                UUID projectId,
+                UUID productId,
                 int quantity) {
-        this.id         = id;
-        this.projectId  = Objects.requireNonNull(projectId,  "projectId cannot be null");
+        if (id != null) {
+            this.id = id;
+        }
+        // If id is null, Hibernate will generate it automatically
+        this.productId  = Objects.requireNonNull(productId,  "productId cannot be null");
         this.quantity   = quantity;
     }
 
     public UUID getId()          { return id; }
-    public UUID getProjectId()   { return projectId; }
+    public UUID getProductId()   { return productId; }
     public int getQuantity()     { return quantity; }
 }
