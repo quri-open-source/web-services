@@ -2,16 +2,13 @@ package quri.teelab.api.teelab.productcatalog.application.acl;
 
 import org.springframework.stereotype.Service;
 import quri.teelab.api.teelab.productcatalog.domain.model.aggregates.Product;
-import quri.teelab.api.teelab.productcatalog.domain.model.commands.AddCommentCommand;
 import quri.teelab.api.teelab.productcatalog.domain.model.commands.CreateProductCommand;
 import quri.teelab.api.teelab.productcatalog.domain.model.commands.UpdateProductPriceCommand;
-import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetAllProductsQuery;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetProductByIdQuery;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetProductsByProjectIdQuery;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.SearchProductsByTagsQuery;
 import quri.teelab.api.teelab.productcatalog.domain.model.valueobjects.ManufacturerId;
 import quri.teelab.api.teelab.productcatalog.domain.model.valueobjects.ProjectId;
-import quri.teelab.api.teelab.productcatalog.domain.model.valueobjects.UserId;
 import quri.teelab.api.teelab.productcatalog.domain.services.ProductCommandService;
 import quri.teelab.api.teelab.productcatalog.domain.services.ProductQueryService;
 import quri.teelab.api.teelab.productcatalog.interfaces.acl.ProductCatalogContextFacade;
@@ -75,16 +72,6 @@ public class ProductCatalogContextFacadeImpl implements ProductCatalogContextFac
             return true;
         } catch (Exception e) {
             return false;
-        }
-    }
-
-    @Override
-    public UUID addComment(UUID productId, String userId, String text) {
-        try {
-            var command = new AddCommentCommand(productId, UserId.of(userId), text);
-            return productCommandService.handle(command);
-        } catch (Exception e) {
-            return null;
         }
     }
 
