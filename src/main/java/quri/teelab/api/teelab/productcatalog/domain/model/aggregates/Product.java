@@ -3,7 +3,6 @@ package quri.teelab.api.teelab.productcatalog.domain.model.aggregates;
 import jakarta.persistence.*;
 import lombok.Getter;
 import quri.teelab.api.teelab.productcatalog.domain.model.commands.CreateProductCommand;
-import quri.teelab.api.teelab.productcatalog.domain.model.entities.Comment;
 import quri.teelab.api.teelab.productcatalog.domain.model.valueobjects.ManufacturerId;
 import quri.teelab.api.teelab.shared.domain.model.valueobjects.Money;
 import quri.teelab.api.teelab.productcatalog.domain.model.valueobjects.ProjectId;
@@ -49,10 +48,6 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "product_id")
-    private List<Comment> comments = new ArrayList<>();
-
     public Product() {
         // Default constructor for JPA
     }
@@ -66,7 +61,6 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
         this.gallery = new ArrayList<>(command.gallery());
         this.rating = 0.0; // Initialize with 0 rating
         this.status = command.status();
-        this.comments = new ArrayList<>();
     }
 
     public void updatePrice(Money newPrice) {
@@ -74,13 +68,7 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
         this.price = newPrice;
     }
 
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-    }
 
-    public void removeComment(Comment comment) {
-        this.comments.remove(comment);
-    }
 
     public void incrementLikes() {
         this.likes++;

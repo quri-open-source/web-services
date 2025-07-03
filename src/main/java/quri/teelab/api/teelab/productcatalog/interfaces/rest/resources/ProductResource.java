@@ -20,7 +20,6 @@ public record ProductResource(
         Date createdAt,
         List<String> gallery,
         Double rating,
-        String status,
-        List<CommentResource> comments
+        String status
 ) {
 }

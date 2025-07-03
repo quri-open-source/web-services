@@ -23,10 +23,7 @@ public class ProductResourceFromEntityAssembler {
                 entity.getCreatedAt(),
                 entity.getGallery(),
                 entity.getRating(),
-                entity.getStatus(),
-                entity.getComments().stream()
-                        .map(CommentResourceFromEntityAssembler::toResourceFromEntity)
-                        .collect(Collectors.toList())
+                entity.getStatus()
         );
     }
 }

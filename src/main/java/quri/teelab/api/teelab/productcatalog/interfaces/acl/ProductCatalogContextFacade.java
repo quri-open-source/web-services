@@ -71,16 +71,6 @@ public interface ProductCatalogContextFacade {
     boolean updateProductPrice(UUID productId, java.math.BigDecimal price, String currency);
 
     /**
-     * Add comment to a product
-     *
-     * @param productId The ID of the product
-     * @param userId    The ID of the user adding the comment
-     * @param text      The comment text
-     * @return The created comment ID or null if creation failed
-     */
-    UUID addComment(UUID productId, String userId, String text);
-
-    /**
      * Search products by tags
      *
      * @param tags List of tags to search for
