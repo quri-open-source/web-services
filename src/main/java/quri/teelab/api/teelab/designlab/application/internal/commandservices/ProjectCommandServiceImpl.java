@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import quri.teelab.api.teelab.designlab.domain.model.aggregates.Project;
 import quri.teelab.api.teelab.designlab.domain.model.commands.CreateProjectCommand;
 import quri.teelab.api.teelab.designlab.domain.model.commands.CreateTextLayerCommand;
+import quri.teelab.api.teelab.designlab.domain.model.commands.DeleteProjectCommand;
 import quri.teelab.api.teelab.designlab.domain.model.commands.DeleteProjectLayerCommand;
 import quri.teelab.api.teelab.designlab.domain.model.commands.UpdateProductDetailsCommand;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.LayerId;
@@ -73,5 +74,19 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
         project.setGarmentGender(command.garmentGender());
         projectRepository.save(project);
         return project.getId();
+    }
+
+    @Override
+    @Transactional
+    public void handle(DeleteProjectCommand command) {
+        var result = projectRepository.findById(command.projectId());
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException("Project with ID " + command.projectId() + " does not exist.");
+        }
+        try {
+            projectRepository.deleteById(command.projectId());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete project with ID " + command.projectId(), e);
+        }
     }
 }
