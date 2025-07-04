@@ -1,7 +1,7 @@
-package com.acme.center.platform.iam.infrastructure.authorization.sfs.pipeline;
+package quri.teelab.api.teelab.iam.infrastructure.authorization.sfs.pipeline;
 
-import com.acme.center.platform.iam.infrastructure.authorization.sfs.model.UsernamePasswordAuthenticationTokenBuilder;
-import com.acme.center.platform.iam.infrastructure.tokens.jwt.BearerTokenService;
+import quri.teelab.api.teelab.iam.infrastructure.authorization.sfs.model.UsernamePasswordAuthenticationTokenBuilder;
+import quri.teelab.api.teelab.iam.infrastructure.tokens.jwt.BearerTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,11 +1,11 @@
-package com.acme.center.platform.iam.domain.model.entities;
+package quri.teelab.api.teelab.iam.domain.model.entities;
 
-import com.acme.center.platform.iam.domain.model.valueobjects.Roles;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import quri.teelab.api.teelab.iam.domain.model.valueobjects.Roles;
 
 import java.util.List;
 

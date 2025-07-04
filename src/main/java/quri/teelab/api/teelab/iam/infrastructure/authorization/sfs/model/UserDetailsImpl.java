@@ -1,6 +1,6 @@
-package com.acme.center.platform.iam.infrastructure.authorization.sfs.model;
+package quri.teelab.api.teelab.iam.infrastructure.authorization.sfs.model;
 
-import com.acme.center.platform.iam.domain.model.aggregates.User;
+import quri.teelab.api.teelab.iam.domain.model.aggregates.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

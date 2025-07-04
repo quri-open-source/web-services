@@ -1,8 +1,8 @@
-package com.acme.center.platform.iam.infrastructure.authorization.sfs.configuration;
+package quri.teelab.api.teelab.iam.infrastructure.authorization.sfs.configuration;
 
-import com.acme.center.platform.iam.infrastructure.authorization.sfs.pipeline.BearerAuthorizationRequestFilter;
-import com.acme.center.platform.iam.infrastructure.hashing.bcrypt.BCryptHashingService;
-import com.acme.center.platform.iam.infrastructure.tokens.jwt.BearerTokenService;
+import quri.teelab.api.teelab.iam.infrastructure.authorization.sfs.pipeline.BearerAuthorizationRequestFilter;
+import quri.teelab.api.teelab.iam.infrastructure.hashing.bcrypt.BCryptHashingService;
+import quri.teelab.api.teelab.iam.infrastructure.tokens.jwt.BearerTokenService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

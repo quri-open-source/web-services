@@ -1,5 +1,5 @@
-package com.acme.center.platform.iam.interfaces.rest.resources;
+package quri.teelab.api.teelab.iam.interfaces.rest.resources;
 
-public record AuthenticatedUserResource(Long id, String username, String token) {
+public record AuthenticatedUserResource(String id, String username, String token) {
 
 }

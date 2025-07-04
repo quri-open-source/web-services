@@ -1,9 +1,9 @@
-package com.acme.center.platform.iam.interfaces.rest;
+package quri.teelab.api.teelab.iam.interfaces.rest;
 
-import com.acme.center.platform.iam.domain.model.queries.GetAllRolesQuery;
-import com.acme.center.platform.iam.domain.services.RoleQueryService;
-import com.acme.center.platform.iam.interfaces.rest.resources.RoleResource;
-import com.acme.center.platform.iam.interfaces.rest.transform.RoleResourceFromEntityAssembler;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetAllRolesQuery;
+import quri.teelab.api.teelab.iam.domain.services.RoleQueryService;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.RoleResource;
+import quri.teelab.api.teelab.iam.interfaces.rest.transform.RoleResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

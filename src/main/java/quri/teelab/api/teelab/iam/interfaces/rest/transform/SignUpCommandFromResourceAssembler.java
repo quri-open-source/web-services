@@ -1,8 +1,8 @@
-package com.acme.center.platform.iam.interfaces.rest.transform;
+package quri.teelab.api.teelab.iam.interfaces.rest.transform;
 
-import com.acme.center.platform.iam.domain.model.commands.SignUpCommand;
-import com.acme.center.platform.iam.domain.model.entities.Role;
-import com.acme.center.platform.iam.interfaces.rest.resources.SignUpResource;
+import quri.teelab.api.teelab.iam.domain.model.commands.SignUpCommand;
+import quri.teelab.api.teelab.iam.domain.model.entities.Role;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.SignUpResource;
 
 import java.util.ArrayList;
 

@@ -1,10 +1,10 @@
-package com.acme.center.platform.iam.interfaces.rest;
+package quri.teelab.api.teelab.iam.interfaces.rest;
 
-import com.acme.center.platform.iam.domain.model.queries.GetAllUsersQuery;
-import com.acme.center.platform.iam.domain.model.queries.GetUserByIdQuery;
-import com.acme.center.platform.iam.domain.services.UserQueryService;
-import com.acme.center.platform.iam.interfaces.rest.resources.UserResource;
-import com.acme.center.platform.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetAllUsersQuery;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetUserByIdQuery;
+import quri.teelab.api.teelab.iam.domain.services.UserQueryService;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.UserResource;
+import quri.teelab.api.teelab.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * This class is a REST controller that exposes the users resource.
@@ -64,7 +65,7 @@ public class UsersController {
             @ApiResponse(responseCode = "200", description = "User retrieved successfully."),
             @ApiResponse(responseCode = "404", description = "User not found."),
             @ApiResponse(responseCode = "401", description = "Unauthorized.")})
-    public ResponseEntity<UserResource> getUserById(@PathVariable Long userId) {
+    public ResponseEntity<UserResource> getUserById(@PathVariable UUID userId) {
         var getUserByIdQuery = new GetUserByIdQuery(userId);
         var user = userQueryService.handle(getUserByIdQuery);
         if (user.isEmpty()) {

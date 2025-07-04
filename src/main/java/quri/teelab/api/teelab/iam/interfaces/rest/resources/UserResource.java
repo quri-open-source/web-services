@@ -1,6 +1,7 @@
-package com.acme.center.platform.iam.interfaces.rest.resources;
+package quri.teelab.api.teelab.iam.interfaces.rest.resources;
 
 import java.util.List;
+import java.util.UUID;
 
-public record UserResource(Long id, String username, List<String> roles) {
+public record UserResource(UUID id, String username, List<String> roles) {
 }

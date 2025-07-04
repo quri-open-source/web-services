@@ -1,4 +1,4 @@
-package com.acme.center.platform.iam.infrastructure.authorization.sfs.pipeline;
+package quri.teelab.api.teelab.iam.infrastructure.authorization.sfs.pipeline;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

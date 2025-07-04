@@ -1,9 +1,9 @@
-package com.acme.center.platform.iam.domain.services;
+package quri.teelab.api.teelab.iam.domain.services;
 
-import com.acme.center.platform.iam.domain.model.aggregates.User;
-import com.acme.center.platform.iam.domain.model.queries.GetAllUsersQuery;
-import com.acme.center.platform.iam.domain.model.queries.GetUserByIdQuery;
-import com.acme.center.platform.iam.domain.model.queries.GetUserByUsernameQuery;
+import quri.teelab.api.teelab.iam.domain.model.aggregates.User;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetAllUsersQuery;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetUserByIdQuery;
+import quri.teelab.api.teelab.iam.domain.model.queries.GetUserByUsernameQuery;
 
 import java.util.List;
 import java.util.Optional;
