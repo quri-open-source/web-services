@@ -88,7 +88,10 @@ public class ProductCatalogContextFacadeImpl implements ProductCatalogContextFac
                 productStatus,
                 projectDetails.title(),
                 projectDetails.previewUrl(),
-                projectDetails.userId()
+                projectDetails.userId(),
+                projectDetails.size(),
+                projectDetails.gender(),
+                projectDetails.color()
         );
 
         return productCommandService.handle(createProductCommand);

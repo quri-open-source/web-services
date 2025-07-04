@@ -39,6 +39,16 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
     @Column(name = "project_user_id", nullable = false)
     private UUID projectUserId;
 
+    // Garment information from DesignLab (cached for performance)
+    @Column(name = "garment_size", nullable = false)
+    private String garmentSize;
+
+    @Column(name = "garment_gender", nullable = false)
+    private String garmentGender;
+
+    @Column(name = "garment_color", nullable = false)
+    private String garmentColor;
+
     // Like count (cached for performance)
     @Column(name = "like_count", nullable = false)
     private Long likeCount = 0L;
@@ -54,6 +64,9 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
         this.projectTitle = command.projectTitle();
         this.projectPreviewUrl = command.projectPreviewUrl();
         this.projectUserId = command.projectUserId();
+        this.garmentSize = command.garmentSize();
+        this.garmentGender = command.garmentGender();
+        this.garmentColor = command.garmentColor();
     }
 
     public void updatePrice(Money newPrice) {
@@ -80,6 +93,21 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
         this.projectTitle = title;
         this.projectPreviewUrl = previewUrl;
         this.projectUserId = userId;
+    }
+
+    public void updateGarmentInfo(String size, String gender, String color) {
+        if (size == null || size.trim().isEmpty()) {
+            throw new IllegalArgumentException("Garment size cannot be null or empty");
+        }
+        if (gender == null || gender.trim().isEmpty()) {
+            throw new IllegalArgumentException("Garment gender cannot be null or empty");
+        }
+        if (color == null || color.trim().isEmpty()) {
+            throw new IllegalArgumentException("Garment color cannot be null or empty");
+        }
+        this.garmentSize = size;
+        this.garmentGender = gender;
+        this.garmentColor = color;
     }
 
     public void updateLikeCount(Long count) {

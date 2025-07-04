@@ -18,6 +18,9 @@ public record ProductResource(
         String projectTitle,
         String projectPreviewUrl,
         UUID projectUserId,
+        String garmentSize,
+        String garmentGender,
+        String garmentColor,
         Long likeCount,
         Date createdAt,
         Date updatedAt
