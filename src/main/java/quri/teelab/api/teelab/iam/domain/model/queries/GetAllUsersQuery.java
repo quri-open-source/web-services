@@ -1,4 +1,4 @@
-package quri.teelab.api.teelab.iam.domain.model.queries;
+package com.acme.center.platform.iam.domain.model.queries;
 
 /**
  * Get all users query

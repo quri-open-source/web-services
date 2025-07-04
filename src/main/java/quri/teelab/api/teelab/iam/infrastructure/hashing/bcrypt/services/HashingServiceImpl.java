@@ -1,6 +1,6 @@
-package quri.teelab.api.teelab.iam.infrastructure.hashing.bcrypt.services;
+package com.acme.center.platform.iam.infrastructure.hashing.bcrypt.services;
 
-import quri.teelab.api.teelab.iam.infrastructure.hashing.bcrypt.BCryptHashingService;
+import com.acme.center.platform.iam.infrastructure.hashing.bcrypt.BCryptHashingService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

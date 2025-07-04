@@ -1,7 +1,7 @@
-package quri.teelab.api.teelab.iam.infrastructure.persistence.jpa.repositories;
+package com.acme.center.platform.iam.infrastructure.persistence.jpa.repositories;
 
-import quri.teelab.api.teelab.iam.domain.model.entities.Role;
-import quri.teelab.api.teelab.iam.domain.model.valueobjects.Roles;
+import com.acme.center.platform.iam.domain.model.entities.Role;
+import com.acme.center.platform.iam.domain.model.valueobjects.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

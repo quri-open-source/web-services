@@ -1,8 +1,8 @@
-package quri.teelab.api.teelab.iam.infrastructure.authorization.sfs.configuration;
+package com.acme.center.platform.iam.infrastructure.authorization.sfs.configuration;
 
-import quri.teelab.api.teelab.iam.infrastructure.authorization.sfs.pipeline.BearerAuthorizationRequestFilter;
-import quri.teelab.api.teelab.iam.infrastructure.hashing.bcrypt.BCryptHashingService;
-import quri.teelab.api.teelab.iam.infrastructure.tokens.jwt.BearerTokenService;
+import com.acme.center.platform.iam.infrastructure.authorization.sfs.pipeline.BearerAuthorizationRequestFilter;
+import com.acme.center.platform.iam.infrastructure.hashing.bcrypt.BCryptHashingService;
+import com.acme.center.platform.iam.infrastructure.tokens.jwt.BearerTokenService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -103,7 +103,7 @@ public class WebSecurityConfiguration {
                 .sessionManagement( customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(
-                                "/api/v1/auth/**",
+                                "/api/v1/authentication/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",

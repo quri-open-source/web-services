@@ -1,18 +1,17 @@
-package quri.teelab.api.teelab.iam.infrastructure.persistence.jpa.repositories;
+package com.acme.center.platform.iam.infrastructure.persistence.jpa.repositories;
 
-import quri.teelab.api.teelab.iam.domain.model.aggregates.User;
+import com.acme.center.platform.iam.domain.model.aggregates.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * This interface is responsible for providing the User entity related operations.
  * It extends the JpaRepository interface.
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID>
+public interface UserRepository extends JpaRepository<User, Long>
 {
     /**
      * This method is responsible for finding the user by username.

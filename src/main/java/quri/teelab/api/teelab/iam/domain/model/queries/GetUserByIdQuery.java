@@ -1,6 +1,4 @@
-package quri.teelab.api.teelab.iam.domain.model.queries;
-
-import java.util.UUID;
+package com.acme.center.platform.iam.domain.model.queries;
 
 /**
  * Get user by id query
@@ -9,5 +7,5 @@ import java.util.UUID;
  * </p>
  * @param userId the id of the user
  */
-public record GetUserByIdQuery(UUID userId) {
+public record GetUserByIdQuery(Long userId) {
 }

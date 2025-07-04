@@ -1,10 +1,10 @@
-package quri.teelab.api.teelab.iam.application.internal.commandservices;
+package com.acme.center.platform.iam.application.internal.commandservices;
 
-import quri.teelab.api.teelab.iam.domain.model.commands.SeedRolesCommand;
-import quri.teelab.api.teelab.iam.domain.model.entities.Role;
-import quri.teelab.api.teelab.iam.domain.model.valueobjects.Roles;
-import quri.teelab.api.teelab.iam.domain.services.RoleCommandService;
-import quri.teelab.api.teelab.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
+import com.acme.center.platform.iam.domain.model.commands.SeedRolesCommand;
+import com.acme.center.platform.iam.domain.model.entities.Role;
+import com.acme.center.platform.iam.domain.model.valueobjects.Roles;
+import com.acme.center.platform.iam.domain.services.RoleCommandService;
+import com.acme.center.platform.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;

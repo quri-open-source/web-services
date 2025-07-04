@@ -1,4 +1,4 @@
-package quri.teelab.api.teelab.iam.domain.model.commands;
+package com.acme.center.platform.iam.domain.model.commands;
 
 /**
  * Sign in command
@@ -8,7 +8,7 @@ package quri.teelab.api.teelab.iam.domain.model.commands;
  * @param username the username of the user
  * @param password the password of the user
  *
- * @see quri.teelab.api.teelab.iam.domain.model.aggregates.User
+ * @see com.acme.center.platform.iam.domain.model.aggregates.User
  */
 public record SignInCommand(String username, String password) {
 }

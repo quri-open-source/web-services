@@ -1,6 +1,6 @@
-package quri.teelab.api.teelab.iam.domain.services;
+package com.acme.center.platform.iam.domain.services;
 
-import quri.teelab.api.teelab.iam.domain.model.commands.SeedRolesCommand;
+import com.acme.center.platform.iam.domain.model.commands.SeedRolesCommand;
 
 /**
  * Role command service

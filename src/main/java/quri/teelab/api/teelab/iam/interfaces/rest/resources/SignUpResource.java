@@ -1,4 +1,4 @@
-package quri.teelab.api.teelab.iam.interfaces.rest.resources;
+package com.acme.center.platform.iam.interfaces.rest.resources;
 
 import java.util.List;
 

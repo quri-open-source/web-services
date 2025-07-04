@@ -1,4 +1,4 @@
-package quri.teelab.api.teelab.iam.application.internal.outboundservices.tokens;
+package com.acme.center.platform.iam.application.internal.outboundservices.tokens;
 
 /**
  * TokenService interface

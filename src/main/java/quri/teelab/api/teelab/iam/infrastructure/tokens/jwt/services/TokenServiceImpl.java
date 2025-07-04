@@ -1,6 +1,6 @@
-package quri.teelab.api.teelab.iam.infrastructure.tokens.jwt.services;
+package com.acme.center.platform.iam.infrastructure.tokens.jwt.services;
 
-import quri.teelab.api.teelab.iam.infrastructure.tokens.jwt.BearerTokenService;
+import com.acme.center.platform.iam.infrastructure.tokens.jwt.BearerTokenService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -151,7 +151,7 @@ public class TokenServiceImpl implements BearerTokenService {
     }
 
     private String extractTokenFrom(String authorizationHeaderParameter) {
-        return authorizationHeaderParameter.substring(TOKEN_BEGIN_INDEX).trim();
+        return authorizationHeaderParameter.substring(TOKEN_BEGIN_INDEX);
     }
 
     private String getAuthorizationParameterFrom(HttpServletRequest request) {

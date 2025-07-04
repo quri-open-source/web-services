@@ -1,13 +1,13 @@
-package quri.teelab.api.teelab.iam.infrastructure.tokens.jwt;
+package com.acme.center.platform.iam.infrastructure.tokens.jwt;
 
-import quri.teelab.api.teelab.iam.application.internal.outboundservices.tokens.TokenService;
+import com.acme.center.platform.iam.application.internal.outboundservices.tokens.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 
 /**
  * This interface is a marker interface for the JWT token service.
  * It extends the {@link TokenService} interface.
- * This interface is used to inject the JWT token service in the {@link quri.teelab.api.teelab.iam.infrastructure.tokens.jwt.services.TokenServiceImpl} class.
+ * This interface is used to inject the JWT token service in the {@link com.acme.learning.platform.iam.infrastructure.tokens.jwt.services.TokenServiceImpl} class.
  */
 public interface BearerTokenService extends TokenService {
 

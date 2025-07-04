@@ -1,13 +1,13 @@
-package quri.teelab.api.teelab.iam.application.internal.commandservices;
+package com.acme.center.platform.iam.application.internal.commandservices;
 
-import quri.teelab.api.teelab.iam.application.internal.outboundservices.hashing.HashingService;
-import quri.teelab.api.teelab.iam.application.internal.outboundservices.tokens.TokenService;
-import quri.teelab.api.teelab.iam.domain.model.aggregates.User;
-import quri.teelab.api.teelab.iam.domain.model.commands.SignInCommand;
-import quri.teelab.api.teelab.iam.domain.model.commands.SignUpCommand;
-import quri.teelab.api.teelab.iam.domain.services.UserCommandService;
-import quri.teelab.api.teelab.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
-import quri.teelab.api.teelab.iam.infrastructure.persistence.jpa.repositories.UserRepository;
+import com.acme.center.platform.iam.application.internal.outboundservices.hashing.HashingService;
+import com.acme.center.platform.iam.application.internal.outboundservices.tokens.TokenService;
+import com.acme.center.platform.iam.domain.model.aggregates.User;
+import com.acme.center.platform.iam.domain.model.commands.SignInCommand;
+import com.acme.center.platform.iam.domain.model.commands.SignUpCommand;
+import com.acme.center.platform.iam.domain.services.UserCommandService;
+import com.acme.center.platform.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
+import com.acme.center.platform.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,9 @@
-package quri.teelab.api.teelab.iam.interfaces.rest;
+package com.acme.center.platform.iam.interfaces.rest;
 
-import quri.teelab.api.teelab.iam.domain.model.queries.GetAllRolesQuery;
-import quri.teelab.api.teelab.iam.domain.services.RoleQueryService;
-import quri.teelab.api.teelab.iam.interfaces.rest.resources.RoleResource;
-import quri.teelab.api.teelab.iam.interfaces.rest.transform.RoleResourceFromEntityAssembler;
+import com.acme.center.platform.iam.domain.model.queries.GetAllRolesQuery;
+import com.acme.center.platform.iam.domain.services.RoleQueryService;
+import com.acme.center.platform.iam.interfaces.rest.resources.RoleResource;
+import com.acme.center.platform.iam.interfaces.rest.transform.RoleResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -21,7 +21,7 @@ import java.util.List;
  *  This controller is responsible for handling all the requests related to roles
  */
 @RestController
-@RequestMapping(value = "/api/v1/roles", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/ap/v1/roles", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Roles", description = "Available Role Endpoints")
 public class RolesController {
     private final RoleQueryService roleQueryService;

@@ -1,7 +1,7 @@
-package quri.teelab.api.teelab.iam.interfaces.rest.transform;
+package com.acme.center.platform.iam.interfaces.rest.transform;
 
-import quri.teelab.api.teelab.iam.domain.model.commands.SignInCommand;
-import quri.teelab.api.teelab.iam.interfaces.rest.resources.SignInResource;
+import com.acme.center.platform.iam.domain.model.commands.SignInCommand;
+import com.acme.center.platform.iam.interfaces.rest.resources.SignInResource;
 
 public class SignInCommandFromResourceAssembler {
     public static SignInCommand toCommandFromResource(SignInResource signInResource) {

@@ -1,16 +1,15 @@
-package quri.teelab.api.teelab.iam.interfaces.acl;
+package com.acme.center.platform.iam.interfaces.acl;
 
-import quri.teelab.api.teelab.iam.domain.model.commands.SignUpCommand;
-import quri.teelab.api.teelab.iam.domain.model.entities.Role;
-import quri.teelab.api.teelab.iam.domain.model.queries.GetUserByIdQuery;
-import quri.teelab.api.teelab.iam.domain.model.queries.GetUserByUsernameQuery;
-import quri.teelab.api.teelab.iam.domain.services.UserCommandService;
-import quri.teelab.api.teelab.iam.domain.services.UserQueryService;
+import com.acme.center.platform.iam.domain.model.commands.SignUpCommand;
+import com.acme.center.platform.iam.domain.model.entities.Role;
+import com.acme.center.platform.iam.domain.model.queries.GetUserByIdQuery;
+import com.acme.center.platform.iam.domain.model.queries.GetUserByUsernameQuery;
+import com.acme.center.platform.iam.domain.services.UserCommandService;
+import com.acme.center.platform.iam.domain.services.UserQueryService;
 import org.apache.logging.log4j.util.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * IamContextFacade
@@ -36,11 +35,11 @@ public class IamContextFacade {
      * @param password The password of the user.
      * @return The id of the created user.
      */
-    public String createUser(String username, String password) {
+    public Long createUser(String username, String password) {
         var signUpCommand = new SignUpCommand(username, password, List.of(Role.getDefaultRole()));
         var result = userCommandService.handle(signUpCommand);
-        if (result.isEmpty()) return null;
-        return result.get().getId().toString();
+        if (result.isEmpty()) return 0L;
+        return result.get().getId();
     }
 
     /**
@@ -50,12 +49,12 @@ public class IamContextFacade {
      * @param roleNames The names of the roles of the user. When a role does not exist, it is ignored.
      * @return The id of the created user.
      */
-    public String createUser(String username, String password, List<String> roleNames) {
+    public Long createUser(String username, String password, List<String> roleNames) {
         var roles = roleNames != null ? roleNames.stream().map(Role::toRoleFromName).toList() : new ArrayList<Role>();
         var signUpCommand = new SignUpCommand(username, password, roles);
         var result = userCommandService.handle(signUpCommand);
-        if (result.isEmpty()) return null;
-        return result.get().getId().toString();
+        if (result.isEmpty()) return 0L;
+        return result.get().getId();
     }
 
     /**
@@ -63,11 +62,11 @@ public class IamContextFacade {
      * @param username The username of the user.
      * @return The id of the user.
      */
-    public String fetchUserIdByUsername(String username) {
+    public Long fetchUserIdByUsername(String username) {
         var getUserByUsernameQuery = new GetUserByUsernameQuery(username);
         var result = userQueryService.handle(getUserByUsernameQuery);
-        if (result.isEmpty()) return null;
-        return result.get().getId().toString();
+        if (result.isEmpty()) return 0L;
+        return result.get().getId();
     }
 
     /**
@@ -75,8 +74,8 @@ public class IamContextFacade {
      * @param userId The id of the user.
      * @return The username of the user.
      */
-    public String fetchUsernameByUserId(String userId) {
-        var getUserByIdQuery = new GetUserByIdQuery(UUID.fromString(userId));
+    public String fetchUsernameByUserId(Long userId) {
+        var getUserByIdQuery = new GetUserByIdQuery(userId);
         var result = userQueryService.handle(getUserByIdQuery);
         if (result.isEmpty()) return Strings.EMPTY;
         return result.get().getUsername();

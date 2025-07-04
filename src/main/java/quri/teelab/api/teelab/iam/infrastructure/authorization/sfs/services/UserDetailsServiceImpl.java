@@ -1,7 +1,7 @@
-package quri.teelab.api.teelab.iam.infrastructure.authorization.sfs.services;
+package com.acme.center.platform.iam.infrastructure.authorization.sfs.services;
 
-import quri.teelab.api.teelab.iam.infrastructure.authorization.sfs.model.UserDetailsImpl;
-import quri.teelab.api.teelab.iam.infrastructure.persistence.jpa.repositories.UserRepository;
+import com.acme.center.platform.iam.infrastructure.authorization.sfs.model.UserDetailsImpl;
+import com.acme.center.platform.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
