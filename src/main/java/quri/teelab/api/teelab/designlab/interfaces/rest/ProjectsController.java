@@ -59,7 +59,7 @@ public class ProjectsController {
                 var projects = projectQueryService.handle(getAllProjectsByUserIdQuery);
                 
                 if (projects.isEmpty()) {
-                    return errorResponse("No projects found for user ID: " + userId, HttpStatus.NOT_FOUND);
+                    return ResponseEntity.ok(List.of());
                 }
                 
                 var projectsResource = projects.stream()
