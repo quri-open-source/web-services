@@ -113,7 +113,10 @@ public class ProjectContextFacadeImpl implements ProjectContextFacade {
                     project.getId().projectId(),
                     project.getTitle(),
                     project.getUserId().userId(),
-                    project.getPreviewUrl()
+                    project.getPreviewUrl(),
+                    project.getGarmentSize().name(),
+                    project.getGarmentGender().name(),
+                    project.getGarmentColor().name()
             );
         } catch (IllegalArgumentException e) {
             // Project not found

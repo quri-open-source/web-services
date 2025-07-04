@@ -14,7 +14,10 @@ public class ProjectDetailsResourceFromEntityAssembler {
                 entity.getId().projectId(),
                 entity.getTitle(),
                 entity.getUserId().userId(),
-                entity.getPreviewUrl()
+                entity.getPreviewUrl(),
+                entity.getGarmentSize(),
+                entity.getGarmentGender(),
+                entity.getGarmentColor()
         );
     }
 }

@@ -1,5 +1,9 @@
 package quri.teelab.api.teelab.designlab.interfaces.rest.resources;
 
+import quri.teelab.api.teelab.designlab.domain.model.valueobjects.GarmentColor;
+import quri.teelab.api.teelab.designlab.domain.model.valueobjects.GarmentGender;
+import quri.teelab.api.teelab.designlab.domain.model.valueobjects.GarmentSize;
+
 import java.util.UUID;
 
 /**
@@ -10,7 +14,10 @@ public record ProjectDetailsResource(
         UUID projectId,
         String title,
         UUID userId,
-        String previewUrl
+        String previewUrl,
+        GarmentSize size,
+        GarmentGender gender,
+        GarmentColor color
 ) {
     public ProjectDetailsResource {
         if (projectId == null) {
@@ -21,6 +28,15 @@ public record ProjectDetailsResource(
         }
         if (userId == null) {
             throw new IllegalArgumentException("User ID cannot be null");
+        }
+        if (size == null) {
+            throw new IllegalArgumentException("Size cannot be null");
+        }
+        if (gender == null) {
+            throw new IllegalArgumentException("Gender cannot be null");
+        }
+        if (color == null) {
+            throw new IllegalArgumentException("Color cannot be null");
         }
     }
 }

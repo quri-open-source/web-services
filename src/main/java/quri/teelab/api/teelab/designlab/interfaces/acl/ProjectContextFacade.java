@@ -63,7 +63,7 @@ public interface ProjectContextFacade {
     /**
      * Retrieves essential project details for product catalog integration.
      * @param projectId The unique identifier of the project
-     * @return ProjectDetailsInfo containing title, userId, projectId, and previewUrl; null if project not found
+     * @return ProjectDetailsInfo containing title, userId, projectId, previewUrl, size, gender, and color; null if project not found
      */
     ProjectDetailsInfo fetchProjectDetailsForProduct(UUID projectId);
 
@@ -74,6 +74,9 @@ public interface ProjectContextFacade {
             UUID projectId,
             String title,
             UUID userId,
-            String previewUrl
+            String previewUrl,
+            String size,
+            String gender,
+            String color
     ) {}
 }
