@@ -48,4 +48,13 @@ public class TextLayer extends Layer {
         this.isItalic = command.isItalic();
         this.isUnderlined = command.isUnderlined();
     }
+    public void updateDetails(String text, String fontColor, String fontFamily, Integer fontSize, Boolean isBold, Boolean isItalic, Boolean isUnderlined) {
+        this.text = text;
+        this.fontColor = fontColor;
+        this.fontFamily = fontFamily;
+        this.fontSize = fontSize;
+        this.isBold = isBold;
+        this.isItalic = isItalic;
+        this.isUnderlined = isUnderlined;
+    }
 }

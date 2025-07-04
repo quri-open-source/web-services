@@ -39,4 +39,10 @@ public class ImageLayer extends Layer {
         this.width = command.width();
         this.height = command.height();
     }
+
+    public void updateDetails(String imageUrl, String width, String height) {
+        this.imageUrl = imageUrl;
+        this.width = Float.parseFloat(width);
+        this.height = Float.parseFloat(height);
+    }
 }

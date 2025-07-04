@@ -13,10 +13,9 @@ import quri.teelab.api.teelab.designlab.domain.services.LayerQueryService;
 import quri.teelab.api.teelab.designlab.domain.services.ProjectCommandService;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.CreateImageLayerResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.CreateTextLayerResource;
-import quri.teelab.api.teelab.designlab.interfaces.rest.transform.CreateImageLayerCommandFromResourceAssembler;
-import quri.teelab.api.teelab.designlab.interfaces.rest.transform.CreateTextLayerCommandFromResourceAssembler;
-import quri.teelab.api.teelab.designlab.interfaces.rest.transform.DeleteProjectLayerCommandFromResourceAssembler;
-import quri.teelab.api.teelab.designlab.interfaces.rest.transform.LayerResourceFromEntityAssembler;
+import quri.teelab.api.teelab.designlab.interfaces.rest.resources.UpdateImageLayerDetailsResource;
+import quri.teelab.api.teelab.designlab.interfaces.rest.resources.UpdateTextLayerDetailsResource;
+import quri.teelab.api.teelab.designlab.interfaces.rest.transform.*;
 import quri.teelab.api.teelab.shared.interfaces.rest.resources.ErrorResource;
 import quri.teelab.api.teelab.shared.interfaces.rest.resources.SuccessMessage;
 
@@ -226,4 +225,143 @@ public class ProjectLayersController {
             return createErrorResponse("Internal server error occurred while processing image layer - " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/layers/{layerId}/text-details")
+    @Operation(summary = "Update text layer details", description = "Update the text properties of a text layer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Text layer details updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data or layer is not a text layer"),
+            @ApiResponse(responseCode = "404", description = "Project or layer not found"),
+            @ApiResponse(responseCode = "403", description = "User not authorized"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> updateTextLayerDetails(
+            @PathVariable String projectId,
+            @PathVariable String layerId,
+            @RequestBody UpdateTextLayerDetailsResource resource) {
+
+        try {
+            // Validate input parameters
+            if (projectId == null || projectId.trim().isEmpty()) {
+                return createErrorResponse("Project ID cannot be null or empty", HttpStatus.BAD_REQUEST);
+            }
+
+            if (layerId == null || layerId.trim().isEmpty()) {
+                return createErrorResponse("Layer ID cannot be null or empty", HttpStatus.BAD_REQUEST);
+            }
+
+            if (resource == null) {
+                return createErrorResponse("Text layer details resource cannot be null", HttpStatus.BAD_REQUEST);
+            }
+
+            var updateTextLayerCommand = UpdateTextLayerDetailsCommandFromResourceAssembler
+                    .toCommandFromResource(resource, projectId, layerId);
+
+            var updatedLayerId = layerCommandService.handle(updateTextLayerCommand);
+
+            if (updatedLayerId == null) {
+                return createErrorResponse("Failed to update text layer details. Please verify the input data and try again.", HttpStatus.BAD_REQUEST);
+            }
+
+            var getLayerByIdQuery = new GetLayerByIdQuery(updatedLayerId);
+            var layer = layerQueryService.handle(getLayerByIdQuery);
+
+            if (layer == null) {
+                return createErrorResponse("Updated text layer could not be retrieved. Layer ID: " + updatedLayerId, HttpStatus.NOT_FOUND);
+            }
+
+            var layerResource = LayerResourceFromEntityAssembler.toResourceFromEntity(layer);
+            return ResponseEntity.ok(layerResource);
+
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage() != null && e.getMessage().contains("not a text layer")) {
+                return createErrorResponse("Layer is not a text layer - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            }
+            return createErrorResponse("Invalid request data - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (SecurityException e) {
+            return createErrorResponse("User not authorized to update text layer details - " + e.getMessage(), HttpStatus.FORBIDDEN);
+        } catch (RuntimeException e) {
+            if (e.getMessage() != null && e.getMessage().contains("project") && e.getMessage().contains("not exist")) {
+                return createErrorResponse("Project not found - " + e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage() != null && e.getMessage().contains("layer") && e.getMessage().contains("not exist")) {
+                return createErrorResponse("Layer not found - " + e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+            return createErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return createErrorResponse("Internal server error occurred while updating text layer details - " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/layers/{layerId}/image-details")
+    @Operation(summary = "Update image layer details", description = "Update the image properties of an image layer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Image layer details updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data or layer is not an image layer"),
+            @ApiResponse(responseCode = "404", description = "Project or layer not found"),
+            @ApiResponse(responseCode = "403", description = "User not authorized"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> updateImageLayerDetails(
+            @PathVariable String projectId,
+            @PathVariable String layerId,
+            @RequestBody UpdateImageLayerDetailsResource resource) {
+
+        try {
+            // Validate input parameters
+            if (projectId == null || projectId.trim().isEmpty()) {
+                return createErrorResponse("Project ID cannot be null or empty", HttpStatus.BAD_REQUEST);
+            }
+
+            if (layerId == null || layerId.trim().isEmpty()) {
+                return createErrorResponse("Layer ID cannot be null or empty", HttpStatus.BAD_REQUEST);
+            }
+
+            if (resource == null) {
+                return createErrorResponse("Image layer details resource cannot be null", HttpStatus.BAD_REQUEST);
+            }
+
+            var updateImageLayerCommand = UpdateImageLayerDetailsCommandFromResourceAssembler
+                    .toCommandFromResource(resource, projectId, layerId);
+
+            var updatedLayerId = layerCommandService.handle(updateImageLayerCommand);
+
+            if (updatedLayerId == null) {
+                return createErrorResponse("Failed to update image layer details. Please verify the input data and try again.", HttpStatus.BAD_REQUEST);
+            }
+
+            var getLayerByIdQuery = new GetLayerByIdQuery(updatedLayerId);
+            var layer = layerQueryService.handle(getLayerByIdQuery);
+
+            if (layer == null) {
+                return createErrorResponse("Updated image layer could not be retrieved. Layer ID: " + updatedLayerId, HttpStatus.NOT_FOUND);
+            }
+
+            var layerResource = LayerResourceFromEntityAssembler.toResourceFromEntity(layer);
+            return ResponseEntity.ok(layerResource);
+
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage() != null && e.getMessage().contains("not an image layer")) {
+                return createErrorResponse("Layer is not an image layer - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            }
+            if (e.getMessage() != null && e.getMessage().contains("Image URL must be")) {
+                return createErrorResponse("Invalid image URL - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            }
+            return createErrorResponse("Invalid request data - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (SecurityException e) {
+            return createErrorResponse("User not authorized to update image layer details - " + e.getMessage(), HttpStatus.FORBIDDEN);
+        } catch (RuntimeException e) {
+            if (e.getMessage() != null && e.getMessage().contains("project") && e.getMessage().contains("not exist")) {
+                return createErrorResponse("Project not found - " + e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage() != null && e.getMessage().contains("layer") && e.getMessage().contains("not exist")) {
+                return createErrorResponse("Layer not found - " + e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+            return createErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return createErrorResponse("Internal server error occurred while updating image layer details - " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }

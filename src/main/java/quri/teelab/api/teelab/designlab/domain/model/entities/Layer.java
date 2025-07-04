@@ -58,4 +58,11 @@ public abstract class Layer {
         this.updatedAt = new Date();
     }
 
+    public void updateCoordinates(int x, int y, int z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.updatedAt = new Date();
+    }
+
 }
