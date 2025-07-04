@@ -8,7 +8,7 @@ import quri.teelab.api.teelab.orderfulfillment.interfaces.rest.resources.CreateF
 import java.util.UUID;
 
 public class CreateFulfillmentCommandFromResourceAssembler {
-    
+
     public static CreateFulfillmentCommand toCommandFromResource(CreateFulfillmentResource resource) {
         return new CreateFulfillmentCommand(
                 new OrderId(UUID.fromString(resource.orderId())),
