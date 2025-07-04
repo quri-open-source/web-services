@@ -14,6 +14,7 @@ import quri.teelab.api.teelab.designlab.domain.services.ProjectCommandService;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.CreateImageLayerResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.CreateTextLayerResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.UpdateImageLayerDetailsResource;
+import quri.teelab.api.teelab.designlab.interfaces.rest.resources.UpdateLayerCoordinatesResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.UpdateTextLayerDetailsResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.transform.*;
 import quri.teelab.api.teelab.shared.interfaces.rest.resources.ErrorResource;
@@ -360,6 +361,70 @@ public class ProjectLayersController {
             return createErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return createErrorResponse("Internal server error occurred while updating image layer details - " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/layers/{layerId}/coordinates")
+    @Operation(summary = "Update layer coordinates", description = "Update the position coordinates (x, y, z) of a layer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Layer coordinates updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "404", description = "Project or layer not found"),
+            @ApiResponse(responseCode = "403", description = "User not authorized"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> updateLayerCoordinates(
+            @PathVariable String projectId,
+            @PathVariable String layerId,
+            @RequestBody UpdateLayerCoordinatesResource resource) {
+
+        try {
+            // Validate input parameters
+            if (projectId == null || projectId.trim().isEmpty()) {
+                return createErrorResponse("Project ID cannot be null or empty", HttpStatus.BAD_REQUEST);
+            }
+
+            if (layerId == null || layerId.trim().isEmpty()) {
+                return createErrorResponse("Layer ID cannot be null or empty", HttpStatus.BAD_REQUEST);
+            }
+
+            if (resource == null) {
+                return createErrorResponse("Layer coordinates resource cannot be null", HttpStatus.BAD_REQUEST);
+            }
+
+            var updateLayerCoordinatesCommand = UpdateLayerCoordinatesCommandFromResourceAssembler
+                    .toCommandFromResource(resource, projectId, layerId);
+
+            var updatedLayerId = layerCommandService.handle(updateLayerCoordinatesCommand);
+
+            if (updatedLayerId == null) {
+                return createErrorResponse("Failed to update layer coordinates. Please verify the input data and try again.", HttpStatus.BAD_REQUEST);
+            }
+
+            var getLayerByIdQuery = new GetLayerByIdQuery(updatedLayerId);
+            var layer = layerQueryService.handle(getLayerByIdQuery);
+
+            if (layer == null) {
+                return createErrorResponse("Updated layer could not be retrieved. Layer ID: " + updatedLayerId, HttpStatus.NOT_FOUND);
+            }
+
+            var layerResource = LayerResourceFromEntityAssembler.toResourceFromEntity(layer);
+            return ResponseEntity.ok(layerResource);
+
+        } catch (IllegalArgumentException e) {
+            return createErrorResponse("Invalid request data - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (SecurityException e) {
+            return createErrorResponse("User not authorized to update layer coordinates - " + e.getMessage(), HttpStatus.FORBIDDEN);
+        } catch (RuntimeException e) {
+            if (e.getMessage() != null && e.getMessage().contains("project") && e.getMessage().contains("not exist")) {
+                return createErrorResponse("Project not found - " + e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage() != null && e.getMessage().contains("layer") && e.getMessage().contains("not exist")) {
+                return createErrorResponse("Layer not found - " + e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+            return createErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return createErrorResponse("Internal server error occurred while updating layer coordinates - " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
