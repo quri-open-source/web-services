@@ -19,6 +19,7 @@ import quri.teelab.api.teelab.designlab.interfaces.rest.resources.ProjectDetails
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.ProjectResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.UpdateProductDetailsResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.transform.CreateProjectCommandFromResourceAssembler;
+import quri.teelab.api.teelab.designlab.interfaces.rest.transform.DeleteProjectCommandFromResourceAssembler;
 import quri.teelab.api.teelab.designlab.interfaces.rest.transform.ProjectDetailsResourceFromEntityAssembler;
 import quri.teelab.api.teelab.designlab.interfaces.rest.transform.ProjectResourceFromEntityAssembler;
 import quri.teelab.api.teelab.shared.interfaces.rest.resources.ErrorResource;
@@ -181,6 +182,40 @@ public class ProjectsController {
             return errorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return errorResponse("Internal server error occurred while updating product details - " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/{projectId}")
+    @Operation(summary = "Delete project", description = "Delete a project by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Project deleted successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid project ID format"),
+            @ApiResponse(responseCode = "404", description = "Project not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> deleteProject(@PathVariable String projectId) {
+        try {
+            if (projectId == null || projectId.trim().isEmpty()) {
+                return errorResponse("Project ID cannot be null or empty", HttpStatus.BAD_REQUEST);
+            }
+
+            var deleteProjectCommand = DeleteProjectCommandFromResourceAssembler.toCommandFromResource(projectId);
+            projectCommandService.handle(deleteProjectCommand);
+
+            return ResponseEntity.ok(new SuccessMessage("Project with ID " + projectId + " has been successfully deleted"));
+            
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage() != null && e.getMessage().contains("does not exist")) {
+                return errorResponse("Project not found with ID: " + projectId, HttpStatus.NOT_FOUND);
+            }
+            return errorResponse("Invalid project ID format: " + projectId, HttpStatus.BAD_REQUEST);
+        } catch (RuntimeException e) {
+            if (e.getMessage() != null && e.getMessage().contains("Failed to delete project")) {
+                return errorResponse("Failed to delete project: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return errorResponse("Error deleting project: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return errorResponse("Internal server error occurred while deleting project - " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
