@@ -17,6 +17,7 @@ import quri.teelab.api.teelab.designlab.domain.services.ProjectQueryService;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.CreateProjectResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.ProjectDetailsResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.resources.ProjectResource;
+import quri.teelab.api.teelab.designlab.interfaces.rest.resources.UpdateProductDetailsResource;
 import quri.teelab.api.teelab.designlab.interfaces.rest.transform.CreateProjectCommandFromResourceAssembler;
 import quri.teelab.api.teelab.designlab.interfaces.rest.transform.ProjectDetailsResourceFromEntityAssembler;
 import quri.teelab.api.teelab.designlab.interfaces.rest.transform.ProjectResourceFromEntityAssembler;
@@ -148,6 +149,38 @@ public class ProjectsController {
             return errorResponse("Invalid project ID format: " + projectId, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return errorResponse("Error retrieving project details: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{projectId}/details")
+    @Operation(summary = "Update product details", description = "Update the product details of a project")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Product details updated successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data"),
+        @ApiResponse(responseCode = "404", description = "Project not found")
+    })
+    public ResponseEntity<?> updateProductDetails(
+            @PathVariable String projectId,
+            @RequestBody UpdateProductDetailsResource resource) {
+        try {
+            if (projectId == null || projectId.trim().isEmpty()) {
+                return errorResponse("Project ID cannot be null or empty", HttpStatus.BAD_REQUEST);
+            }
+            if (resource == null) {
+                return errorResponse("Product details resource cannot be null", HttpStatus.BAD_REQUEST);
+            }
+            var command = quri.teelab.api.teelab.designlab.interfaces.rest.transform.UpdateProductDetailsCommandFromAssembler.toCommandFromResource(resource, projectId);
+            var updatedProjectId = projectCommandService.handle(command);
+            return ResponseEntity.ok(new SuccessMessage("Product details updated for project with ID: " + updatedProjectId.projectId()));
+        } catch (IllegalArgumentException e) {
+            return errorResponse("Invalid request data - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (RuntimeException e) {
+            if (e.getMessage() != null && e.getMessage().contains("does not exist")) {
+                return errorResponse("Project not found - " + e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+            return errorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return errorResponse("Internal server error occurred while updating product details - " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
