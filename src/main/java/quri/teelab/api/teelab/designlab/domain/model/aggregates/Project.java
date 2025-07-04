@@ -105,4 +105,20 @@ public class Project {
         return layers.stream().anyMatch(layer -> layer.getId().equals(layerId));
     }
 
+    public void setPreviewUrl(String previewUrl) {
+        this.previewUrl = previewUrl;
+    }
+    public void setStatus(ProjectStatus status) {
+        this.status = status;
+    }
+    public void setGarmentColor(GarmentColor garmentColor) {
+        this.garmentColor = garmentColor;
+    }
+    public void setGarmentSize(GarmentSize garmentSize) {
+        this.garmentSize = garmentSize;
+    }
+    public void setGarmentGender(GarmentGender garmentGender) {
+        this.garmentGender = garmentGender;
+    }
+
 }
