@@ -21,6 +21,9 @@ public class ProductResourceFromEntityAssembler {
                 entity.getProjectTitle(),
                 entity.getProjectPreviewUrl(),
                 entity.getProjectUserId(),
+                entity.getGarmentSize(),
+                entity.getGarmentGender(),
+                entity.getGarmentColor(),
                 entity.getLikeCount(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()

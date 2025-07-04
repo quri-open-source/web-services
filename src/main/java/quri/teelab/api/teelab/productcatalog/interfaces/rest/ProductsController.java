@@ -128,7 +128,7 @@ public class ProductsController {
     }
 
     @PatchMapping("/{productId}")
-    @Operation(summary = "Update product", description = "Update specific fields of an existing product")
+    @Operation(summary = "Update product", description = "Update specific fields of an existing product (price amount and status only, currency cannot be changed)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product updated successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
@@ -154,13 +154,20 @@ public class ProductsController {
                 }
             }
 
-            // Update price if provided
+            // Update price if provided (currency cannot be changed)
             if (resource.priceAmount() != null) {
-                String currency = (resource.priceCurrency() != null && !resource.priceCurrency().trim().isEmpty()) 
-                    ? resource.priceCurrency() : "PEN"; // Default currency
-                
                 try {
-                    var money = new Money(resource.priceAmount(), java.util.Currency.getInstance(currency));
+                    // Get current product to preserve existing currency
+                    var currentProductQuery = new GetProductByIdQuery(productId);
+                    var currentProduct = productQueryService.handle(currentProductQuery);
+                    
+                    if (currentProduct.isEmpty()) {
+                        return ResponseEntity.notFound().build();
+                    }
+                    
+                    // Use existing currency with new price amount
+                    var existingCurrency = currentProduct.get().getPrice().currency();
+                    var money = new Money(resource.priceAmount(), existingCurrency);
                     var updatePriceCommand = new UpdateProductPriceCommand(productId, money);
                     productCommandService.handle(updatePriceCommand);
                 } catch (Exception e) {
