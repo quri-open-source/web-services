@@ -17,5 +17,12 @@ public interface OrderProcessingContextFacade {
      * @return OrderDto or null if not found
      */
     OrderDto fetchOrderById(UUID orderId);
+
+    /**
+     * Fetch all items for a specific order
+     * @param orderId The order ID
+     * @return List of ItemDto
+     */
+    List<ItemDto> fetchItemsByOrderId(UUID orderId);
 }
 
