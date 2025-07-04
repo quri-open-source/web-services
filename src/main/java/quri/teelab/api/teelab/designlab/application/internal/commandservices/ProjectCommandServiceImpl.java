@@ -6,6 +6,7 @@ import quri.teelab.api.teelab.designlab.domain.model.aggregates.Project;
 import quri.teelab.api.teelab.designlab.domain.model.commands.CreateProjectCommand;
 import quri.teelab.api.teelab.designlab.domain.model.commands.CreateTextLayerCommand;
 import quri.teelab.api.teelab.designlab.domain.model.commands.DeleteProjectLayerCommand;
+import quri.teelab.api.teelab.designlab.domain.model.commands.UpdateProductDetailsCommand;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.LayerId;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.ProjectId;
 import quri.teelab.api.teelab.designlab.domain.services.ProjectCommandService;
@@ -54,5 +55,23 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
             throw new RuntimeException("Failed to create project", e);
         }
 
+    }
+
+    @Override
+    @Transactional
+    public ProjectId handle(UpdateProductDetailsCommand command) {
+        var result = projectRepository.findById(command.projectId());
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException("Project with ID " + command.projectId() + " does not exist.");
+        }
+        var project = result.get();
+        // Actualizar los detalles del proyecto
+        project.setPreviewUrl(command.previewUrl());
+        project.setStatus(command.status());
+        project.setGarmentColor(command.garmentColor());
+        project.setGarmentSize(command.garmentSize());
+        project.setGarmentGender(command.garmentGender());
+        projectRepository.save(project);
+        return project.getId();
     }
 }
