@@ -75,7 +75,11 @@ public class FulfillmentsController {
 
     @PostMapping
     @Operation(summary = "Create fulfillment", description = "Create a new fulfillment with the provided details")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Fulfillment created successfully"), @ApiResponse(responseCode = "400", description = "Invalid input data"), @ApiResponse(responseCode = "404", description = "Fulfillment not found")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Fulfillment created successfully"), 
+        @ApiResponse(responseCode = "400", description = "Invalid input data"), 
+        @ApiResponse(responseCode = "404", description = "Fulfillment not found")
+    })
     public ResponseEntity<FulfillmentResource> createFulfillment(@RequestBody CreateFulfillmentResource resource) {
         var createFulfillmentCommand = CreateFulfillmentCommandFromResourceAssembler.toCommandFromResource(resource);
         var fulfillmentId = fulfillmentCommandService.handle(createFulfillmentCommand);
