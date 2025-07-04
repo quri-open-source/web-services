@@ -12,7 +12,10 @@ public record CreateProductCommand(
         ProductStatus status,
         String projectTitle,
         String projectPreviewUrl,
-        UUID projectUserId
+        UUID projectUserId,
+        String garmentSize,
+        String garmentGender,
+        String garmentColor
 ) {
     /**
      * Alternative constructor accepting String IDs and primitive values
@@ -23,7 +26,10 @@ public record CreateProductCommand(
             ProductStatus status,
             String projectTitle,
             String projectPreviewUrl,
-            UUID projectUserId
+            UUID projectUserId,
+            String garmentSize,
+            String garmentGender,
+            String garmentColor
     ) {
         this(
                 ProjectId.of(projectId),
@@ -31,7 +37,10 @@ public record CreateProductCommand(
                 status,
                 projectTitle,
                 projectPreviewUrl,
-                projectUserId
+                projectUserId,
+                garmentSize,
+                garmentGender,
+                garmentColor
         );
     }
 
@@ -50,6 +59,15 @@ public record CreateProductCommand(
         }
         if (projectUserId == null) {
             throw new IllegalArgumentException("Project user ID cannot be null");
+        }
+        if (garmentSize == null || garmentSize.trim().isEmpty()) {
+            throw new IllegalArgumentException("Garment size cannot be null or empty");
+        }
+        if (garmentGender == null || garmentGender.trim().isEmpty()) {
+            throw new IllegalArgumentException("Garment gender cannot be null or empty");
+        }
+        if (garmentColor == null || garmentColor.trim().isEmpty()) {
+            throw new IllegalArgumentException("Garment color cannot be null or empty");
         }
     }
 }

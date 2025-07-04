@@ -49,7 +49,10 @@ public class CreateProductCommandFromResourceAssembler {
                 status,
                 projectDetails.title(),
                 projectDetails.previewUrl(),
-                projectDetails.userId()
+                projectDetails.userId(),
+                projectDetails.size(),
+                projectDetails.gender(),
+                projectDetails.color()
         );
     }
 }
