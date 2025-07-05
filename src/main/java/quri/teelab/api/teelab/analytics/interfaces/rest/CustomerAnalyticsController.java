@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import quri.teelab.api.teelab.analytics.application.internal.queryservices.CustomerAnalyticsQueryServiceImpl;
+import quri.teelab.api.teelab.analytics.application.internal.queryservices.CustomerAnalyticsRealTimeQueryServiceImpl;
 import quri.teelab.api.teelab.analytics.domain.model.queries.GetCustomerAnalyticsByUserIdQuery;
 import quri.teelab.api.teelab.analytics.interfaces.rest.resources.CustomerAnalyticsResource;
-import quri.teelab.api.teelab.analytics.interfaces.rest.transform.CustomerAnalyticsResourceFromEntityAssembler;
 
 import java.util.UUID;
 
@@ -22,9 +21,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/api/v1/analytics", produces = APPLICATION_JSON_VALUE)
 @Tag(name = "Analytics", description = "Analytics endpoints for customers and manufacturers")
 public class CustomerAnalyticsController {
-    private final CustomerAnalyticsQueryServiceImpl customerAnalyticsQueryService;
+    private final CustomerAnalyticsRealTimeQueryServiceImpl customerAnalyticsQueryService;
 
-    public CustomerAnalyticsController(CustomerAnalyticsQueryServiceImpl customerAnalyticsQueryService) {
+    public CustomerAnalyticsController(CustomerAnalyticsRealTimeQueryServiceImpl customerAnalyticsQueryService) {
         this.customerAnalyticsQueryService = customerAnalyticsQueryService;
     }
 
@@ -53,10 +52,11 @@ public class CustomerAnalyticsController {
         }
         var query = new GetCustomerAnalyticsByUserIdQuery(uuid);
         var analytics = customerAnalyticsQueryService.handle(query);
-        if (analytics == null) {
+        
+        if (analytics.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        var response = CustomerAnalyticsResourceFromEntityAssembler.toResponse(analytics);
-        return ResponseEntity.ok(response);
+        
+        return ResponseEntity.ok(analytics.get());
     }
 }

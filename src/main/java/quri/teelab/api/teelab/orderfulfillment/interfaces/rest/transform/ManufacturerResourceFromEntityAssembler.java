@@ -7,7 +7,7 @@ public class ManufacturerResourceFromEntityAssembler {
 
     public static ManufacturerResource toResourceFromEntity(Manufacturer entity) {
         return new ManufacturerResource(
-                "manufacturer-" + entity.getId(),
+                entity.getId().toString(),
                 entity.getUserId().toString(),
                 entity.getName(),
                 entity.getAddress().toString(),
