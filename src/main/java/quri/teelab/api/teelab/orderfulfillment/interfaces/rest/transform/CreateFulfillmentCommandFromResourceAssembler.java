@@ -10,9 +10,21 @@ import java.util.UUID;
 public class CreateFulfillmentCommandFromResourceAssembler {
 
     public static CreateFulfillmentCommand toCommandFromResource(CreateFulfillmentResource resource) {
-        return new CreateFulfillmentCommand(
-                new OrderId(UUID.fromString(resource.orderId())),
-                new ManufacturerId(UUID.fromString(resource.manufacturerId()))
-        );
+        // Validate that required fields are not null or empty
+        if (resource.orderId() == null || resource.orderId().trim().isEmpty()) {
+            throw new IllegalArgumentException("Order ID cannot be null or empty");
+        }
+        if (resource.manufacturerId() == null || resource.manufacturerId().trim().isEmpty()) {
+            throw new IllegalArgumentException("Manufacturer ID cannot be null or empty");
+        }
+
+        try {
+            return new CreateFulfillmentCommand(
+                    new OrderId(UUID.fromString(resource.orderId().trim())),
+                    new ManufacturerId(UUID.fromString(resource.manufacturerId().trim()))
+            );
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid UUID format for orderId or manufacturerId: " + e.getMessage());
+        }
     }
 }

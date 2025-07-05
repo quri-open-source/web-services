@@ -17,5 +17,19 @@ public interface OrderProcessingContextFacade {
      * @return OrderDto or null if not found
      */
     OrderDto fetchOrderById(UUID orderId);
+
+    /**
+     * Fetch all items for a specific order
+     * @param orderId The order ID
+     * @return List of ItemDto for the given order
+     */
+    List<ItemDto> fetchItemsByOrderId(UUID orderId);
+
+    /**
+     * Check if an order exists
+     * @param orderId The order ID to check
+     * @return true if the order exists, false otherwise
+     */
+    boolean orderExists(UUID orderId);
 }
 
