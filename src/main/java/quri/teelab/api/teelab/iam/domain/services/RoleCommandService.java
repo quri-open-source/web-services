@@ -1,5 +1,6 @@
 package quri.teelab.api.teelab.iam.domain.services;
 
+
 import quri.teelab.api.teelab.iam.domain.model.commands.SeedRolesCommand;
 
 /**

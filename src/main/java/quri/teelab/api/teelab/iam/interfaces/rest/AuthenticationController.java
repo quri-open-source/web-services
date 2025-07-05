@@ -1,14 +1,5 @@
 package quri.teelab.api.teelab.iam.interfaces.rest;
 
-import quri.teelab.api.teelab.iam.domain.services.UserCommandService;
-import quri.teelab.api.teelab.iam.interfaces.rest.resources.AuthenticatedUserResource;
-import quri.teelab.api.teelab.iam.interfaces.rest.resources.SignInResource;
-import quri.teelab.api.teelab.iam.interfaces.rest.resources.SignUpResource;
-import quri.teelab.api.teelab.iam.interfaces.rest.resources.UserResource;
-import quri.teelab.api.teelab.iam.interfaces.rest.transform.AuthenticatedUserResourceFromEntityAssembler;
-import quri.teelab.api.teelab.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
-import quri.teelab.api.teelab.iam.interfaces.rest.transform.SignUpCommandFromResourceAssembler;
-import quri.teelab.api.teelab.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,6 +11,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import quri.teelab.api.teelab.iam.domain.services.UserCommandService;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.AuthenticatedUserResource;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.SignInResource;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.SignUpResource;
+import quri.teelab.api.teelab.iam.interfaces.rest.resources.UserResource;
+import quri.teelab.api.teelab.iam.interfaces.rest.transform.AuthenticatedUserResourceFromEntityAssembler;
+import quri.teelab.api.teelab.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
+import quri.teelab.api.teelab.iam.interfaces.rest.transform.SignUpCommandFromResourceAssembler;
+import quri.teelab.api.teelab.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 
 /**
  * AuthenticationController

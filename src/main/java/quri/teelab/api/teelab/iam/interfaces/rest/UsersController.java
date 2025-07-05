@@ -65,8 +65,8 @@ public class UsersController {
             @ApiResponse(responseCode = "200", description = "User retrieved successfully."),
             @ApiResponse(responseCode = "404", description = "User not found."),
             @ApiResponse(responseCode = "401", description = "Unauthorized.")})
-    public ResponseEntity<UserResource> getUserById(@PathVariable String userId) {
-        var getUserByIdQuery = new GetUserByIdQuery(UUID.fromString(userId));
+    public ResponseEntity<UserResource> getUserById(@PathVariable UUID userId) {
+        var getUserByIdQuery = new GetUserByIdQuery(userId);
         var user = userQueryService.handle(getUserByIdQuery);
         if (user.isEmpty()) {
             return ResponseEntity.notFound().build();
