@@ -1,22 +1,22 @@
 package quri.teelab.api.teelab.analytics.interfaces.rest.resources;
 
 public class ManufacturerAnalyticsResource {
-    private String userId;
+    private String manufacturerId;
     private int totalOrdersReceived;
     private int pendingFulfillments;
     private int producedProjects;
     private double avgFulfillmentTimeDays;
 
-    public ManufacturerAnalyticsResource(String userId, int totalOrdersReceived, int pendingFulfillments, int producedProjects, double avgFulfillmentTimeDays) {
-        this.userId = userId;
+    public ManufacturerAnalyticsResource(String manufacturerId, int totalOrdersReceived, int pendingFulfillments, int producedProjects, double avgFulfillmentTimeDays) {
+        this.manufacturerId = manufacturerId;
         this.totalOrdersReceived = totalOrdersReceived;
         this.pendingFulfillments = pendingFulfillments;
         this.producedProjects = producedProjects;
         this.avgFulfillmentTimeDays = avgFulfillmentTimeDays;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getManufacturerId() {
+        return manufacturerId;
     }
 
     public int getTotalOrdersReceived() {
