@@ -95,27 +95,37 @@ public class ProductsController {
     })
     public ResponseEntity<ProductResource> createProduct(@RequestBody CreateProductResource resource) {
         try {
+            System.out.println("Step 1");
             // Validate the resource
             if (resource == null) {
                 return ResponseEntity.badRequest().build();
             }
-
+            System.out.println("Step 2");
             // Create the product command using the project context facade
             var createProductCommand = CreateProductCommandFromResourceAssembler.toCommandFromResource(
                     resource, projectContextFacade);
             var productId = productCommandService.handle(createProductCommand);
 
+            System.out.println("Step 3 productId: " + productId);
+
             if (productId == null) {
                 return ResponseEntity.badRequest().build();
             }
+
+            System.out.println("Step 4");
 
             // Retrieve the created product
             var getProductByIdQuery = new GetProductByIdQuery(productId);
             var product = productQueryService.handle(getProductByIdQuery);
 
+            System.out.println("Step 5 product: " + product);
+
             if (product.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
+
+            // Convert the product entity to a resource
+            System.out.println("Step 6");
 
             var productResource = ProductResourceFromEntityAssembler.toResourceFromEntity(product.get());
             return new ResponseEntity<>(productResource, HttpStatus.CREATED);

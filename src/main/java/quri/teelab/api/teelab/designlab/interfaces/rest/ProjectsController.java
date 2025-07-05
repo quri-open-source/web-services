@@ -127,7 +127,7 @@ public class ProjectsController {
     }
 
     @PutMapping("/{projectId}/details")
-    @Operation(summary = "Update product details", description = "Update the product details of a project")
+    @Operation(summary = "Update project details", description = "Update the project details of a project")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Product details updated successfully"),
         @ApiResponse(responseCode = "400", description = "Invalid input data"),
@@ -141,11 +141,11 @@ public class ProjectsController {
                 return errorResponse("Project ID cannot be null or empty", HttpStatus.BAD_REQUEST);
             }
             if (resource == null) {
-                return errorResponse("Product details resource cannot be null", HttpStatus.BAD_REQUEST);
+                return errorResponse("Project details resource cannot be null", HttpStatus.BAD_REQUEST);
             }
             var command = UpdateProductDetailsCommandFromAssembler.toCommandFromResource(resource, projectId);
             var updatedProjectId = projectCommandService.handle(command);
-            return ResponseEntity.ok(new SuccessMessage("Product details updated for project with ID: " + updatedProjectId.projectId()));
+            return ResponseEntity.ok(new SuccessMessage("Project details updated for project with ID: " + updatedProjectId.projectId()));
         } catch (IllegalArgumentException e) {
             return errorResponse("Invalid request data - " + e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (RuntimeException e) {
@@ -154,7 +154,7 @@ public class ProjectsController {
             }
             return errorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return errorResponse("Internal server error occurred while updating product details - " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return errorResponse("Internal server error occurred while updating project details - " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

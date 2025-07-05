@@ -9,8 +9,7 @@ import java.math.BigDecimal;
 public record CreateProductResource(
         String projectId,
         BigDecimal priceAmount,
-        String priceCurrency,
-        String status  // Will be converted to ProductStatus enum
+        String priceCurrency
 ) {
     public CreateProductResource {
         if (projectId == null || projectId.trim().isEmpty()) {
