@@ -32,21 +32,10 @@ public class CreateProductCommandFromResourceAssembler {
                 resource.priceCurrency() != null ? resource.priceCurrency() : Money.DEFAULT_CURRENCY.getCurrencyCode()
         );
         
-        // Parse status or default to AVAILABLE
-        ProductStatus status = ProductStatus.AVAILABLE;
-        if (resource.status() != null && !resource.status().trim().isEmpty()) {
-            try {
-                status = ProductStatus.valueOf(resource.status().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Invalid status: " + resource.status() + 
-                    ". Valid statuses are: AVAILABLE, UNAVAILABLE, OUT_OF_STOCK, DISCONTINUED");
-            }
-        }
-
         return new CreateProductCommand(
                 resource.projectId(),
                 new Money(resource.priceAmount(), currency),
-                status,
+                ProductStatus.AVAILABLE,
                 projectDetails.title(),
                 projectDetails.previewUrl(),
                 projectDetails.userId(),
