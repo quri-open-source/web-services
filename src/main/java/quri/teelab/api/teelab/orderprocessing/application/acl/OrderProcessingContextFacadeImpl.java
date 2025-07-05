@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrderByIdQuery;
 import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrdersByUserIdQuery;
 import quri.teelab.api.teelab.orderprocessing.domain.services.OrderProcessingQueryService;
+import quri.teelab.api.teelab.orderprocessing.interfaces.acl.ItemDto;
 import quri.teelab.api.teelab.orderprocessing.interfaces.acl.OrderDto;
 import quri.teelab.api.teelab.orderprocessing.interfaces.acl.OrderProcessingContextFacade;
 
@@ -44,5 +45,26 @@ public class OrderProcessingContextFacadeImpl implements OrderProcessingContextF
                 item.getQuantity(),
                 item.getId()
         );
+    }
+
+    @Override
+    public List<ItemDto> fetchItemsByOrderId(UUID orderId) {
+        var order = queryService.getOrderById(new GetOrderByIdQuery(orderId));
+        if (order == null) return List.of();
+        
+        return order.getItems().stream()
+                .map(item -> new ItemDto(
+                        item.getId(),
+                        order.getId(),
+                        item.getProductId(),
+                        item.getQuantity()
+                ))
+                .toList();
+    }
+
+    @Override
+    public boolean orderExists(UUID orderId) {
+        var order = queryService.getOrderById(new GetOrderByIdQuery(orderId));
+        return order != null;
     }
 }
