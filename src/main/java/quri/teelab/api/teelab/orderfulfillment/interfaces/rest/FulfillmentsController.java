@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -75,18 +76,44 @@ public class FulfillmentsController {
 
     @PostMapping
     @Operation(summary = "Create fulfillment", description = "Create a new fulfillment with the provided details")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Fulfillment created successfully"), @ApiResponse(responseCode = "400", description = "Invalid input data"), @ApiResponse(responseCode = "404", description = "Fulfillment not found")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Fulfillment created successfully"), 
+        @ApiResponse(responseCode = "400", description = "Invalid input data or business rule violation"), 
+        @ApiResponse(responseCode = "404", description = "Order or manufacturer not found"),
+        @ApiResponse(responseCode = "409", description = "Fulfillment already exists for this order and manufacturer")
+    })
     public ResponseEntity<FulfillmentResource> createFulfillment(@RequestBody CreateFulfillmentResource resource) {
-        var createFulfillmentCommand = CreateFulfillmentCommandFromResourceAssembler.toCommandFromResource(resource);
-        var fulfillmentId = fulfillmentCommandService.handle(createFulfillmentCommand);
-        if (fulfillmentId == null) return ResponseEntity.badRequest().build();
+        try {
+            var createFulfillmentCommand = CreateFulfillmentCommandFromResourceAssembler.toCommandFromResource(resource);
+            var fulfillmentId = fulfillmentCommandService.handle(createFulfillmentCommand);
+            
+            if (fulfillmentId == null) {
+                return ResponseEntity.badRequest().build();
+            }
 
-        var getFulfillmentByIdQuery = new GetFulfillmentByIdQuery(fulfillmentId);
-        var fulfillment = fulfillmentQueryService.handle(getFulfillmentByIdQuery);
-        if (fulfillment.isEmpty()) return ResponseEntity.notFound().build();
+            var getFulfillmentByIdQuery = new GetFulfillmentByIdQuery(fulfillmentId);
+            var fulfillment = fulfillmentQueryService.handle(getFulfillmentByIdQuery);
+            
+            if (fulfillment.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
 
-        var fulfillmentEntity = fulfillment.get();
-        var fulfillmentResource = FulfillmentResourceFromEntityAssembler.toResourceFromEntity(fulfillmentEntity);
-        return new ResponseEntity<>(fulfillmentResource, HttpStatus.CREATED);
+            var fulfillmentEntity = fulfillment.get();
+            var fulfillmentResource = FulfillmentResourceFromEntityAssembler.toResourceFromEntity(fulfillmentEntity);
+            return new ResponseEntity<>(fulfillmentResource, HttpStatus.CREATED);
+            
+        } catch (IllegalArgumentException e) {
+            // Handle validation errors and duplicate fulfillments
+            if (e.getMessage().contains("already exists")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+            return ResponseEntity.badRequest().build();
+        } catch (EntityNotFoundException e) {
+            // Handle case where order or manufacturer not found
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            // Handle any other unexpected errors
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
