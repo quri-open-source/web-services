@@ -42,7 +42,7 @@ public class FulfillmentsController {
         @ApiResponse(responseCode = "404", description = "No fulfillments found")
     })
     public ResponseEntity<List<FulfillmentResource>> getAllFulfillments(
-            @RequestParam(value = "manufacturerId", required = false) String manufacturerId) {
+            @RequestParam(value = "manufacturerId") String manufacturerId) {
         
         if (manufacturerId != null) {
             var getAllFulfillmentsByManufacturerIdQuery = new GetAllFulfillmentsByManufacturerIdQuery(manufacturerId);
