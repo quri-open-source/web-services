@@ -22,6 +22,7 @@ import quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform.CreateOr
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform.CreateOrderIntentResourceFromEntityAssembler;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform.OrderResourceAssembler;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -53,8 +54,7 @@ public class OrderProcessingController {
                 .toList();
         
         if (orders.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("This user does not have any orders.");
+            return ResponseEntity.ok(List.of());
         }
         return ResponseEntity.ok(orders);
     }
