@@ -1,8 +1,10 @@
 package quri.teelab.api.teelab.orderprocessing.domain.model.aggregates;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import quri.teelab.api.teelab.orderprocessing.domain.model.commands.CreateOrderCommand;
 import quri.teelab.api.teelab.orderprocessing.domain.model.entities.Item;
+import quri.teelab.api.teelab.orderprocessing.domain.model.valueobjects.OrderStatus;
 import quri.teelab.api.teelab.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.UUID;
  */
 
 @Entity
+@Getter
 @Table(name = "order_processing")
 public class OrderProcessing extends AuditableAbstractAggregateRoot<OrderProcessing> {
 
@@ -26,6 +29,9 @@ public class OrderProcessing extends AuditableAbstractAggregateRoot<OrderProcess
     @JoinColumn(name = "order_id")
     private List<Item> items;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
 
     protected OrderProcessing() {
         // Constructor para JPA
@@ -35,18 +41,16 @@ public class OrderProcessing extends AuditableAbstractAggregateRoot<OrderProcess
     public OrderProcessing(CreateOrderCommand command) {
         this.userId = command.getUserId();
         this.items = (command.getItems() == null) ? new ArrayList<>() : new ArrayList<>(command.getItems());
-
+        this.status = OrderStatus.PROCESSING; // Default status when creating an order
     }
 
-    /**
-     * Expone el valor del identificador del agregado.
-     */
-
-    // Getters
-    public UUID getUserId() { return userId; }
-    public List<Item> getItems() { return List.copyOf(items); }
-    public UUID getId() { return super.getId(); }
-
+    public boolean complete() {
+        if (this.status != OrderStatus.PROCESSING) {
+            throw new IllegalStateException("Order can only be completed if it is in PROCESSING status.");
+        }
+        this.status = OrderStatus.COMPLETED;
+        return true;
+    }
 
     @Override
     protected OrderProcessing self() {

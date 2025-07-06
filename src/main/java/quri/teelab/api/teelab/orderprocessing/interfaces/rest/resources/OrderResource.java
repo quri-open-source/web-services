@@ -1,5 +1,7 @@
 package quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources;
 
+import quri.teelab.api.teelab.orderprocessing.domain.model.valueobjects.OrderStatus;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -11,5 +13,6 @@ import java.util.UUID;
 public record OrderResource(
         UUID id,
         UUID userId,
+        OrderStatus orderStatus,
         List<ItemResource> items
 ) {}

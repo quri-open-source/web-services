@@ -31,5 +31,7 @@ public interface OrderProcessingContextFacade {
      * @return true if the order exists, false otherwise
      */
     boolean orderExists(UUID orderId);
+
+    boolean completeOrder(UUID orderId);
 }
 
