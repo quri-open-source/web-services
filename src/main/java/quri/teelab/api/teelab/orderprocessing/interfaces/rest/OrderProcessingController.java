@@ -14,11 +14,15 @@ import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrderByIdQ
 import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrdersByUserIdQuery;
 import quri.teelab.api.teelab.orderprocessing.domain.services.OrderProcessingCommandService;
 import quri.teelab.api.teelab.orderprocessing.domain.services.OrderProcessingQueryService;
+import quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources.CreateOrderIntentResource;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources.CreateOrderResource;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.resources.OrderResource;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform.CreateOrderCommandFromResourceAssembler;
+import quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform.CreateOrderIntentCommandFromResourceAssembler;
+import quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform.CreateOrderIntentResourceFromEntityAssembler;
 import quri.teelab.api.teelab.orderprocessing.interfaces.rest.transform.OrderResourceAssembler;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -50,8 +54,7 @@ public class OrderProcessingController {
                 .toList();
         
         if (orders.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("This user does not have any orders.");
+            return ResponseEntity.ok(List.of());
         }
         return ResponseEntity.ok(orders);
     }
@@ -83,12 +86,28 @@ public class OrderProcessingController {
     public ResponseEntity<?> createOrder(@Valid @RequestBody CreateOrderResource resource) {
         try {
             CreateOrderCommand cmd = CreateOrderCommandFromResourceAssembler.toCommand(resource);
-            OrderProcessing createdOrder = commandService.createOrder(cmd);
+            OrderProcessing createdOrder = commandService.handle(cmd);
             OrderResource orderResource = OrderResourceAssembler.toResource(createdOrder);
             return ResponseEntity.status(HttpStatus.CREATED).body(orderResource);
         } catch (Exception e) {
             // Return error message for debugging
             return ResponseEntity.badRequest().body("Error creating order: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/payment-intents")
+    @Operation(summary = "Get Stripe client secret")
+    public ResponseEntity<?> getStripeClientSecret(@RequestBody CreateOrderIntentResource resource) {
+        try {
+            var createOrderIntentCommand = CreateOrderIntentCommandFromResourceAssembler.createCommandFromResource(resource);
+
+            var intent = commandService.handle(createOrderIntentCommand);
+
+            var intentResource = CreateOrderIntentResourceFromEntityAssembler.toResourceFromEntity(intent);
+
+            return ResponseEntity.ok(intentResource);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error creating order intent: " + e.getMessage());
         }
     }
 

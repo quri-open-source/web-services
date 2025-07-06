@@ -16,15 +16,20 @@ public class CreateOrderCommand {
     private final List<Item> items;
 
     public CreateOrderCommand(
-                              UUID userId,
-                              List<Item> items) {
+            UUID userId,
+            List<Item> items) {
 
-        this.userId         = userId;
-        this.items          = items;
+        this.userId = userId;
+        this.items = items;
     }
 
 
-    public UUID getUserId()          { return userId; }
-    public List<Item> getItems()     { return items; }
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
 
 }

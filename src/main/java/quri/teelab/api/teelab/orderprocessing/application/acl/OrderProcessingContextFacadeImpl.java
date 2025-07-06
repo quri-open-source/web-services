@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrderByIdQuery;
 import quri.teelab.api.teelab.orderprocessing.domain.model.queries.GetOrdersByUserIdQuery;
 import quri.teelab.api.teelab.orderprocessing.domain.services.OrderProcessingQueryService;
+import quri.teelab.api.teelab.orderprocessing.infrastructure.persistence.jpa.repositories.OrderProcessingRepository;
 import quri.teelab.api.teelab.orderprocessing.interfaces.acl.ItemDto;
 import quri.teelab.api.teelab.orderprocessing.interfaces.acl.OrderDto;
 import quri.teelab.api.teelab.orderprocessing.interfaces.acl.OrderProcessingContextFacade;
@@ -14,9 +15,11 @@ import java.util.UUID;
 @Service
 public class OrderProcessingContextFacadeImpl implements OrderProcessingContextFacade {
     private final OrderProcessingQueryService queryService;
+    private final OrderProcessingRepository orderProcessingRepository;
 
-    public OrderProcessingContextFacadeImpl(OrderProcessingQueryService queryService) {
+    public OrderProcessingContextFacadeImpl(OrderProcessingQueryService queryService, OrderProcessingRepository orderProcessingRepository) {
         this.queryService = queryService;
+        this.orderProcessingRepository = orderProcessingRepository;
     }
 
     @Override
@@ -66,5 +69,16 @@ public class OrderProcessingContextFacadeImpl implements OrderProcessingContextF
     public boolean orderExists(UUID orderId) {
         var order = queryService.getOrderById(new GetOrderByIdQuery(orderId));
         return order != null;
+    }
+
+    @Override
+    public boolean completeOrder(UUID orderId) {
+        var order = queryService.getOrderById(new GetOrderByIdQuery(orderId));
+        if (order == null) {
+            return false; // Order does not exist
+        }
+        var completed = order.complete();
+        orderProcessingRepository.save(order);
+        return completed;
     }
 }

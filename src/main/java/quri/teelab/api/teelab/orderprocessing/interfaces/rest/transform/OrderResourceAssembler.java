@@ -14,6 +14,7 @@ public class OrderResourceAssembler {
         return new OrderResource(
                 order.getId(),
                 order.getUserId(),
+                order.getStatus(),
                 order.getItems().stream()
                         .map(i -> new ItemResource(
                                 i.getId(),
