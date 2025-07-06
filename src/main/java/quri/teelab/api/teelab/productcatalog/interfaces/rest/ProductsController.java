@@ -10,13 +10,19 @@ import org.springframework.web.bind.annotation.*;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetAllProductsQuery;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetProductByIdQuery;
 import quri.teelab.api.teelab.productcatalog.domain.model.queries.GetProductsByProjectIdQuery;
-import quri.teelab.api.teelab.productcatalog.domain.model.queries.SearchProductsByTagsQuery;
+import quri.teelab.api.teelab.productcatalog.domain.model.commands.DeleteProductCommand;
+import quri.teelab.api.teelab.productcatalog.domain.model.commands.UpdateProductStatusCommand;
+import quri.teelab.api.teelab.productcatalog.domain.model.commands.UpdateProductPriceCommand;
+import quri.teelab.api.teelab.productcatalog.domain.model.valueobjects.ProductStatus;
+import quri.teelab.api.teelab.shared.domain.model.valueobjects.Money;
 import quri.teelab.api.teelab.productcatalog.domain.services.ProductCommandService;
 import quri.teelab.api.teelab.productcatalog.domain.services.ProductQueryService;
 import quri.teelab.api.teelab.productcatalog.interfaces.rest.resources.CreateProductResource;
 import quri.teelab.api.teelab.productcatalog.interfaces.rest.resources.ProductResource;
+import quri.teelab.api.teelab.productcatalog.interfaces.rest.resources.UpdateProductResource;
 import quri.teelab.api.teelab.productcatalog.interfaces.rest.transform.CreateProductCommandFromResourceAssembler;
 import quri.teelab.api.teelab.productcatalog.interfaces.rest.transform.ProductResourceFromEntityAssembler;
+import quri.teelab.api.teelab.designlab.interfaces.acl.ProjectContextFacade;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,25 +37,37 @@ public class ProductsController {
 
     private final ProductCommandService productCommandService;
     private final ProductQueryService productQueryService;
+    private final ProjectContextFacade projectContextFacade;
 
-    public ProductsController(ProductCommandService productCommandService, ProductQueryService productQueryService) {
+    public ProductsController(ProductCommandService productCommandService, 
+                             ProductQueryService productQueryService,
+                             ProjectContextFacade projectContextFacade) {
         this.productCommandService = productCommandService;
         this.productQueryService = productQueryService;
+        this.projectContextFacade = projectContextFacade;
     }
 
     @GetMapping
-    @Operation(summary = "Get all products", description = "Get all products from the catalog")
+    @Operation(summary = "Get all products", description = "Get all products from the catalog, optionally filtered by project")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Products found"),
-            @ApiResponse(responseCode = "404", description = "Products not found")
+            @ApiResponse(responseCode = "200", description = "Products retrieved successfully")
     })
-    public ResponseEntity<List<ProductResource>> getAllProducts() {
-        var products = productQueryService.handle(new GetAllProductsQuery());
-        if (products.isEmpty()) return ResponseEntity.notFound().build();
-
-        var productResources = products.stream()
-                .map(ProductResourceFromEntityAssembler::toResourceFromEntity)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<ProductResource>> getAllProducts(
+            @RequestParam(value = "projectId", required = false) String projectId) {
+        
+        List<ProductResource> productResources;
+        
+        if (projectId != null) {
+            var products = productQueryService.handle(new GetProductsByProjectIdQuery(projectId));
+            productResources = products.stream()
+                    .map(ProductResourceFromEntityAssembler::toResourceFromEntity)
+                    .collect(Collectors.toList());
+        } else {
+            var products = productQueryService.handle(new GetAllProductsQuery());
+            productResources = products.stream()
+                    .map(ProductResourceFromEntityAssembler::toResourceFromEntity)
+                    .collect(Collectors.toList());
+        }
 
         return ResponseEntity.ok(productResources);
     }
@@ -68,58 +86,141 @@ public class ProductsController {
         return ResponseEntity.ok(productResource);
     }
 
-    @GetMapping("/by-project/{projectId}")
-    @Operation(summary = "Get products by project ID", description = "Get all products associated with a specific project")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Products found"),
-            @ApiResponse(responseCode = "404", description = "Products not found")
-    })
-    public ResponseEntity<List<ProductResource>> getProductsByProjectId(@PathVariable String projectId) {
-        var products = productQueryService.handle(new GetProductsByProjectIdQuery(projectId));
-        if (products.isEmpty()) return ResponseEntity.notFound().build();
-
-        var productResources = products.stream()
-                .map(ProductResourceFromEntityAssembler::toResourceFromEntity)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(productResources);
-    }
-
-    @GetMapping("/search")
-    @Operation(summary = "Search products by tags", description = "Search products that match any of the provided tags")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Products found"),
-            @ApiResponse(responseCode = "404", description = "Products not found")
-    })
-    public ResponseEntity<List<ProductResource>> searchProductsByTags(@RequestParam List<String> tags) {
-        var products = productQueryService.handle(new SearchProductsByTagsQuery(tags));
-        if (products.isEmpty()) return ResponseEntity.notFound().build();
-
-        var productResources = products.stream()
-                .map(ProductResourceFromEntityAssembler::toResourceFromEntity)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(productResources);
-    }
-
     @PostMapping
-    @Operation(summary = "Create product", description = "Create a new product in the catalog")
+    @Operation(summary = "Create product", description = "Create a new product in the catalog based on a project")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Product created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data")
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "404", description = "Project not found")
     })
     public ResponseEntity<ProductResource> createProduct(@RequestBody CreateProductResource resource) {
-        var createProductCommand = CreateProductCommandFromResourceAssembler.toCommandFromResource(resource);
-        var productId = productCommandService.handle(createProductCommand);
+        try {
+            System.out.println("Step 1");
+            // Validate the resource
+            if (resource == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            System.out.println("Step 2");
+            // Create the product command using the project context facade
+            var createProductCommand = CreateProductCommandFromResourceAssembler.toCommandFromResource(
+                    resource, projectContextFacade);
+            var productId = productCommandService.handle(createProductCommand);
 
-        if (productId == null) return ResponseEntity.badRequest().build();
+            System.out.println("Step 3 productId: " + productId);
 
-        var getProductByIdQuery = new GetProductByIdQuery(productId);
-        var product = productQueryService.handle(getProductByIdQuery);
+            if (productId == null) {
+                return ResponseEntity.badRequest().build();
+            }
 
-        if (product.isEmpty()) return ResponseEntity.notFound().build();
+            System.out.println("Step 4");
 
-        var productResource = ProductResourceFromEntityAssembler.toResourceFromEntity(product.get());
-        return new ResponseEntity<>(productResource, HttpStatus.CREATED);
+            // Retrieve the created product
+            var getProductByIdQuery = new GetProductByIdQuery(productId);
+            var product = productQueryService.handle(getProductByIdQuery);
+
+            System.out.println("Step 5 product: " + product);
+
+            if (product.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
+            // Convert the product entity to a resource
+            System.out.println("Step 6");
+
+            var productResource = ProductResourceFromEntityAssembler.toResourceFromEntity(product.get());
+            return new ResponseEntity<>(productResource, HttpStatus.CREATED);
+            
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PatchMapping("/{productId}")
+    @Operation(summary = "Update product", description = "Update specific fields of an existing product (price amount and status only, currency cannot be changed)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "404", description = "Product not found")
+    })
+    public ResponseEntity<ProductResource> updateProduct(@PathVariable UUID productId, 
+                                          @RequestBody UpdateProductResource resource) {
+        try {
+            // Validate the resource
+            if (resource == null) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            // Update status if provided
+            if (resource.status() != null && !resource.status().trim().isEmpty()) {
+                ProductStatus productStatus;
+                try {
+                    productStatus = ProductStatus.valueOf(resource.status().toUpperCase());
+                    var updateStatusCommand = new UpdateProductStatusCommand(productId, productStatus);
+                    productCommandService.handle(updateStatusCommand);
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Update price if provided (currency cannot be changed)
+            if (resource.priceAmount() != null) {
+                try {
+                    // Get current product to preserve existing currency
+                    var currentProductQuery = new GetProductByIdQuery(productId);
+                    var currentProduct = productQueryService.handle(currentProductQuery);
+                    
+                    if (currentProduct.isEmpty()) {
+                        return ResponseEntity.notFound().build();
+                    }
+                    
+                    // Use existing currency with new price amount
+                    var existingCurrency = currentProduct.get().getPrice().currency();
+                    var money = new Money(resource.priceAmount(), existingCurrency);
+                    var updatePriceCommand = new UpdateProductPriceCommand(productId, money);
+                    productCommandService.handle(updatePriceCommand);
+                } catch (Exception e) {
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
+            // Retrieve the updated product
+            var getProductByIdQuery = new GetProductByIdQuery(productId);
+            var product = productQueryService.handle(getProductByIdQuery);
+
+            if (product.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            var productResource = ProductResourceFromEntityAssembler.toResourceFromEntity(product.get());
+            return ResponseEntity.ok(productResource);
+            
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/{productId}")
+    @Operation(summary = "Delete product", description = "Delete an existing product from the catalog")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Product deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Product not found")
+    })
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId) {
+        try {
+            // Delete the product
+            var deleteProductCommand = new DeleteProductCommand(productId);
+            productCommandService.handle(deleteProductCommand);
+            
+            return ResponseEntity.noContent().build();
+            
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

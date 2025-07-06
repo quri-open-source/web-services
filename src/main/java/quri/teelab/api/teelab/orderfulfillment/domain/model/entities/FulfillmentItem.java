@@ -19,7 +19,7 @@ public class FulfillmentItem {
     private FulfillmentItemId id;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false, columnDefinition = "UUID"))
+    @AttributeOverride(name = "value", column = @Column(name = "product_id", nullable = false))
     private ProductId productId;
 
     @Column(name = "quantity", nullable = false)
@@ -28,7 +28,7 @@ public class FulfillmentItem {
     @Column(name = "status", nullable = false, length = 20)
     private FulfillmentItemStatus status;
 
-    @Column(name = "fulfillment_id", nullable = false, columnDefinition = "UUID", insertable = false, updatable = false)
+    @Column(name = "fulfillment_id", nullable = false, insertable = false, updatable = false)
     private UUID fulfillmentId;
 
     public FulfillmentItem(FulfillmentItemId id, ProductId productId, int quantity, FulfillmentItemStatus status, UUID fulfillmentId) {
@@ -39,18 +39,11 @@ public class FulfillmentItem {
         this.fulfillmentId = fulfillmentId;
     }
 
-    public void markAsShipped() {
-        if (this.status != FulfillmentItemStatus.PENDING) {
-            throw new IllegalStateException("Only pending items can be shipped.");
+    public void updateStatus(FulfillmentItemStatus newStatus) {
+        if (newStatus == null) {
+            throw new IllegalArgumentException("New status cannot be null");
         }
-        this.status = FulfillmentItemStatus.SHIPPED;
-    }
-
-    public void markAsReceived() {
-        if (this.status != FulfillmentItemStatus.SHIPPED) {
-            throw new IllegalStateException("Only shipped items can be received.");
-        }
-        this.status = FulfillmentItemStatus.RECEIVED;
+        this.status = newStatus;
     }
 }
 

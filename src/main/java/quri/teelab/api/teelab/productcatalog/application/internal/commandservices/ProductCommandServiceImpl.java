@@ -2,12 +2,11 @@ package quri.teelab.api.teelab.productcatalog.application.internal.commandservic
 
 import org.springframework.stereotype.Service;
 import quri.teelab.api.teelab.productcatalog.domain.model.aggregates.Product;
-import quri.teelab.api.teelab.productcatalog.domain.model.commands.AddCommentCommand;
 import quri.teelab.api.teelab.productcatalog.domain.model.commands.CreateProductCommand;
+import quri.teelab.api.teelab.productcatalog.domain.model.commands.DeleteProductCommand;
 import quri.teelab.api.teelab.productcatalog.domain.model.commands.UpdateProductPriceCommand;
-import quri.teelab.api.teelab.productcatalog.domain.model.entities.Comment;
+import quri.teelab.api.teelab.productcatalog.domain.model.commands.UpdateProductStatusCommand;
 import quri.teelab.api.teelab.productcatalog.domain.services.ProductCommandService;
-import quri.teelab.api.teelab.productcatalog.infrastructure.persistence.jpa.repositories.CommentRepository;
 import quri.teelab.api.teelab.productcatalog.infrastructure.persistence.jpa.repositories.ProductRepository;
 
 import java.util.Optional;
@@ -17,11 +16,9 @@ import java.util.UUID;
 public class ProductCommandServiceImpl implements ProductCommandService {
 
     private final ProductRepository productRepository;
-    private final CommentRepository commentRepository;
 
-    public ProductCommandServiceImpl(ProductRepository productRepository, CommentRepository commentRepository) {
+    public ProductCommandServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -44,17 +41,21 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     }
 
     @Override
-    public UUID handle(AddCommentCommand command) {
+    public void handle(UpdateProductStatusCommand command) {
         Optional<Product> productOptional = productRepository.findById(command.productId());
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
-            Comment comment = new Comment(command.userId(), command.text());
-            commentRepository.save(comment);
-
-            product.addComment(comment);
+            product.updateStatus(command.status());
             productRepository.save(product);
+        } else {
+            throw new IllegalArgumentException("Product not found with ID: " + command.productId());
+        }
+    }
 
-            return comment.getId();
+    @Override
+    public void handle(DeleteProductCommand command) {
+        if (productRepository.existsById(command.productId())) {
+            productRepository.deleteById(command.productId());
         } else {
             throw new IllegalArgumentException("Product not found with ID: " + command.productId());
         }

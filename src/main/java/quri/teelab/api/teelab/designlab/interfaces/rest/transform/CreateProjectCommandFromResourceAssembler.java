@@ -10,7 +10,7 @@ import quri.teelab.api.teelab.designlab.interfaces.rest.resources.CreateProjectR
 import java.util.UUID;
 
 public class CreateProjectCommandFromResourceAssembler {
-    public static CreateProjectCommand CreateProjectCommandFromResourceAssembler(CreateProjectResource resource) {
+    public static CreateProjectCommand toCommandFromResource(CreateProjectResource resource) {
         if (resource == null) {
             throw new IllegalArgumentException("CreateProjectResource cannot be null");
         }

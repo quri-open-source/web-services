@@ -3,7 +3,6 @@ package quri.teelab.api.teelab.orderfulfillment.domain.model.aggregates;
 import jakarta.persistence.*;
 import lombok.Getter;
 import quri.teelab.api.teelab.orderfulfillment.domain.model.valueobjects.FulfillmentStatus;
-import quri.teelab.api.teelab.orderfulfillment.domain.model.valueobjects.ManufacturerId;
 import quri.teelab.api.teelab.orderfulfillment.domain.model.valueobjects.OrderId;
 import quri.teelab.api.teelab.orderfulfillment.domain.model.valueobjects.UserId;
 import quri.teelab.api.teelab.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
@@ -18,7 +17,7 @@ import java.util.UUID;
 @Table(name = "manufacturers")
 public class Manufacturer extends AuditableAbstractAggregateRoot<Manufacturer> {
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false, columnDefinition = "UUID", unique = true))
+    @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false, unique = true))
     private UserId userId;
 
     @Column(name = "name", nullable = false, length = 100)

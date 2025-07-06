@@ -3,24 +3,27 @@ package quri.teelab.api.teelab.analytics.interfaces.rest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import quri.teelab.api.teelab.analytics.application.internal.queryservices.CustomerAnalyticsQueryServiceImpl;
+import quri.teelab.api.teelab.analytics.application.internal.queryservices.CustomerAnalyticsRealTimeQueryServiceImpl;
 import quri.teelab.api.teelab.analytics.domain.model.queries.GetCustomerAnalyticsByUserIdQuery;
 import quri.teelab.api.teelab.analytics.interfaces.rest.resources.CustomerAnalyticsResource;
-import quri.teelab.api.teelab.analytics.interfaces.rest.transform.CustomerAnalyticsResourceFromEntityAssembler;
 
 import java.util.UUID;
 
-@RestController
-@RequestMapping("/api/analytics/customer")
-public class CustomerAnalyticsController {
-    private final CustomerAnalyticsQueryServiceImpl customerAnalyticsQueryService;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-    public CustomerAnalyticsController(CustomerAnalyticsQueryServiceImpl customerAnalyticsQueryService) {
+@RestController
+@RequestMapping(value = "/api/v1/analytics", produces = APPLICATION_JSON_VALUE)
+@Tag(name = "Analytics", description = "Analytics endpoints for customers and manufacturers")
+public class CustomerAnalyticsController {
+    private final CustomerAnalyticsRealTimeQueryServiceImpl customerAnalyticsQueryService;
+
+    public CustomerAnalyticsController(CustomerAnalyticsRealTimeQueryServiceImpl customerAnalyticsQueryService) {
         this.customerAnalyticsQueryService = customerAnalyticsQueryService;
     }
 
@@ -30,10 +33,10 @@ public class CustomerAnalyticsController {
      * @param userId the customer user identifier
      * @return Customer analytics metrics
      */
-    @GetMapping("/{userId}")
+    @GetMapping("/customer-kpis/{userId}")
     @Operation(
-            summary = "Get customer analytics",
-            description = "Returns analytics metrics related to design activities for a customer, such as total projects, blueprints, designed garments, and completed projects."
+            summary = "Get customer analytics KPIs",
+            description = "Returns analytics KPIs related to design activities for a customer, such as total projects, blueprints, designed garments, and completed projects."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Customer analytics found and returned successfully"),
@@ -49,10 +52,11 @@ public class CustomerAnalyticsController {
         }
         var query = new GetCustomerAnalyticsByUserIdQuery(uuid);
         var analytics = customerAnalyticsQueryService.handle(query);
-        if (analytics == null) {
+        
+        if (analytics.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        var response = CustomerAnalyticsResourceFromEntityAssembler.toResponse(analytics);
-        return ResponseEntity.ok(response);
+        
+        return ResponseEntity.ok(analytics.get());
     }
 }

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Embeddable
 public record FulfillmentId(
-    @Column(name = "id", columnDefinition = "UUID")
+    @Column(name = "id")
     UUID value
 ) implements Serializable {
     public FulfillmentId {

@@ -2,7 +2,7 @@ package quri.teelab.api.teelab.productcatalog.interfaces.rest.resources;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import java.util.UUID;
 
 /**
  * Resource representation of a Product.
@@ -10,17 +10,19 @@ import java.util.List;
  * as part of the anti-corruption layer pattern.
  */
 public record ProductResource(
-        String id,
-        String projectId,
-        String manufacturerId,
-        BigDecimal price,
-        String currency,
-        Integer likes,
-        List<String> tags,
-        Date createdAt,
-        List<String> gallery,
-        Double rating,
+        UUID id,
+        UUID projectId,
+        BigDecimal priceAmount,
+        String priceCurrency,
         String status,
-        List<CommentResource> comments
+        String projectTitle,
+        String projectPreviewUrl,
+        UUID projectUserId,
+        String garmentSize,
+        String garmentGender,
+        String garmentColor,
+        Long likeCount,
+        Date createdAt,
+        Date updatedAt
 ) {
 }

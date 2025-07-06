@@ -9,7 +9,6 @@ import quri.teelab.api.teelab.designlab.domain.model.commands.CreateImageLayerCo
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.LayerId;
 import quri.teelab.api.teelab.designlab.domain.model.valueobjects.LayerType;
 
-import java.awt.*;
 import java.util.UUID;
 
 @Entity
@@ -34,10 +33,16 @@ public class ImageLayer extends Layer {
         this.height = height;
     }
 
-    public ImageLayer(CreateImageLayerCommand command) {
+    public ImageLayer(CreateImageLayerCommand command, String imageUrl) {
         super(new LayerId(UUID.randomUUID()), LayerType.IMAGE);
-        this.imageUrl = command.imageUrl();
+        this.imageUrl = imageUrl;
         this.width = command.width();
         this.height = command.height();
+    }
+
+    public void updateDetails(String imageUrl, String width, String height) {
+        this.imageUrl = imageUrl;
+        this.width = Float.parseFloat(width);
+        this.height = Float.parseFloat(height);
     }
 }

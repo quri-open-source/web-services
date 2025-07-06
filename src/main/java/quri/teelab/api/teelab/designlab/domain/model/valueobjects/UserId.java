@@ -1,7 +1,6 @@
 package quri.teelab.api.teelab.designlab.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
-import quri.teelab.api.teelab.analytics.domain.model.aggregates.User;
 
 import java.util.UUID;
 
