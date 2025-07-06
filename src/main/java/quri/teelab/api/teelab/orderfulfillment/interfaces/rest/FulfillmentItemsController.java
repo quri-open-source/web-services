@@ -15,6 +15,8 @@ import quri.teelab.api.teelab.orderfulfillment.domain.model.valueobjects.Fulfill
 import quri.teelab.api.teelab.orderfulfillment.domain.services.FulfillmentItemCommandService;
 import quri.teelab.api.teelab.orderfulfillment.domain.services.FulfillmentItemQueryService;
 import quri.teelab.api.teelab.orderfulfillment.interfaces.rest.resources.FulfillmentItemResource;
+import quri.teelab.api.teelab.orderfulfillment.interfaces.rest.resources.UpdateFulfillmentItemStatusResource;
+import quri.teelab.api.teelab.orderfulfillment.interfaces.rest.transform.CreateUpdateFulfillmentItemStatusCommandFromResource;
 import quri.teelab.api.teelab.orderfulfillment.interfaces.rest.transform.FulfillmentItemResourceFromEntityAssembler;
 
 import java.util.List;
@@ -51,27 +53,27 @@ public class FulfillmentItemsController {
         return ResponseEntity.ok(fulfillmentItemResources);
     }
 
-    @PostMapping("/{fulfillmentItemId}/ship")
+    @PatchMapping("/{fulfillmentItemId}")
     @Operation(summary = "Mark fulfillment item as shipped", description = "Mark a fulfillment item as shipped by changing its status from PENDING to SHIPPED")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Fulfillment item marked as shipped successfully"), 
         @ApiResponse(responseCode = "400", description = "Invalid fulfillment item ID or item cannot be shipped"),
         @ApiResponse(responseCode = "404", description = "Fulfillment item not found")
     })
-    public ResponseEntity<FulfillmentItemResource> markFulfillmentItemAsShipped(@PathVariable UUID fulfillmentItemId) {
-        var fulfillmentItemIdVO = new FulfillmentItemId(fulfillmentItemId);
-        var markFulfillmentItemAsShippedCommand = new MarkFulfillmentItemAsShippedCommand(fulfillmentItemIdVO);
-        
+    public ResponseEntity<FulfillmentItemResource> updateFulfillmentItemStatus(@RequestBody UpdateFulfillmentItemStatusResource resource, @PathVariable String fulfillmentItemId) {
+        var updateFulfillmentItemStatusCommand = CreateUpdateFulfillmentItemStatusCommandFromResource.toCommandFromResource(resource, fulfillmentItemId);
+
         try {
-            var fulfillmentItem = fulfillmentItemCommandService.handle(markFulfillmentItemAsShippedCommand);
+            var fulfillmentItem = fulfillmentItemCommandService.handle(updateFulfillmentItemStatusCommand);
             
             if (fulfillmentItem.isEmpty()) {
                 return ResponseEntity.badRequest().build();
             }
             
             var fulfillmentItemResource = FulfillmentItemResourceFromEntityAssembler.toResourceFromEntity(fulfillmentItem.get());
-            return ResponseEntity.ok(fulfillmentItemResource);
             
+            return ResponseEntity.ok(fulfillmentItemResource);
+
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (IllegalStateException e) {
@@ -79,59 +81,4 @@ public class FulfillmentItemsController {
         }
     }
 
-    @PostMapping("/{fulfillmentItemId}/receive")
-    @Operation(summary = "Mark fulfillment item as received", description = "Mark a fulfillment item as received by changing its status from SHIPPED to RECEIVED")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Fulfillment item marked as received successfully"), 
-        @ApiResponse(responseCode = "400", description = "Invalid fulfillment item ID or item cannot be received"),
-        @ApiResponse(responseCode = "404", description = "Fulfillment item not found")
-    })
-    public ResponseEntity<FulfillmentItemResource> markFulfillmentItemAsReceived(@PathVariable UUID fulfillmentItemId) {
-        var fulfillmentItemIdVO = new FulfillmentItemId(fulfillmentItemId);
-        var markFulfillmentItemAsReceivedCommand = new MarkFulfillmentItemAsReceivedCommand(fulfillmentItemIdVO);
-        
-        try {
-            var fulfillmentItem = fulfillmentItemCommandService.handle(markFulfillmentItemAsReceivedCommand);
-            
-            if (fulfillmentItem.isEmpty()) {
-                return ResponseEntity.badRequest().build();
-            }
-            
-            var fulfillmentItemResource = FulfillmentItemResourceFromEntityAssembler.toResourceFromEntity(fulfillmentItem.get());
-            return ResponseEntity.ok(fulfillmentItemResource);
-            
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @PostMapping("/{fulfillmentItemId}/cancel")
-    @Operation(summary = "Cancel fulfillment item", description = "Cancel a fulfillment item by changing its status from PENDING to CANCELLED")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Fulfillment item cancelled successfully"), 
-        @ApiResponse(responseCode = "400", description = "Invalid fulfillment item ID or item cannot be cancelled"),
-        @ApiResponse(responseCode = "404", description = "Fulfillment item not found")
-    })
-    public ResponseEntity<FulfillmentItemResource> cancelFulfillmentItem(@PathVariable UUID fulfillmentItemId) {
-        var fulfillmentItemIdVO = new FulfillmentItemId(fulfillmentItemId);
-        var cancelFulfillmentItemCommand = new CancelFulfillmentItemCommand(fulfillmentItemIdVO);
-        
-        try {
-            var fulfillmentItem = fulfillmentItemCommandService.handle(cancelFulfillmentItemCommand);
-            
-            if (fulfillmentItem.isEmpty()) {
-                return ResponseEntity.badRequest().build();
-            }
-            
-            var fulfillmentItemResource = FulfillmentItemResourceFromEntityAssembler.toResourceFromEntity(fulfillmentItem.get());
-            return ResponseEntity.ok(fulfillmentItemResource);
-            
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
 }

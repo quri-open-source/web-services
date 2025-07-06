@@ -39,25 +39,11 @@ public class FulfillmentItem {
         this.fulfillmentId = fulfillmentId;
     }
 
-    public void markAsShipped() {
-        if (this.status != FulfillmentItemStatus.PENDING) {
-            throw new IllegalStateException("Only pending items can be shipped.");
+    public void updateStatus(FulfillmentItemStatus newStatus) {
+        if (newStatus == null) {
+            throw new IllegalArgumentException("New status cannot be null");
         }
-        this.status = FulfillmentItemStatus.SHIPPED;
-    }
-
-    public void markAsReceived() {
-        if (this.status != FulfillmentItemStatus.SHIPPED) {
-            throw new IllegalStateException("Only shipped items can be received.");
-        }
-        this.status = FulfillmentItemStatus.RECEIVED;
-    }
-
-    public void markAsCancelled() {
-        if (this.status != FulfillmentItemStatus.PENDING) {
-            throw new IllegalStateException("Only pending items can be cancelled.");
-        }
-        this.status = FulfillmentItemStatus.CANCELLED;
+        this.status = newStatus;
     }
 }
 
